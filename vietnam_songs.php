@@ -405,7 +405,7 @@ mysqli_data_seek($res_songs, 0);
 					<div class="fv3-contact">
 						<div class="row">
 							<div class="col-2">
-								<span ><box-icon name='gmail' type='logo' ></box-icon></span>
+								<span ><box-icon name='envelope' type='solid'></box-icon></span>
 							</div>
 							<div class="col-10">
 								<h6>email</h6>
@@ -509,16 +509,6 @@ mysqli_data_seek($res_songs, 0);
 		});
 	</script>
 	<!-- //end-smooth-scrolling -->
-	<!-- smooth-scrolling-of-move-up -->
-	<script>
-		$(document).ready(function() {
-			$().UItoTop({
-				easingType: 'easeOutQuart'
-			});
-		});
-	</script>
-	<script src="js/SmoothScroll.min.js "></script>
-	<!-- //smooth-scrolling-of-move-up -->
 	<!-- Bootstrap Core JavaScript -->
 	<script src="js/bootstrap.js"></script>
 	<!-- //Bootstrap Core JavaScript -->

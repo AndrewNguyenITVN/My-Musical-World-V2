@@ -50,60 +50,7 @@ while ($song = mysqli_fetch_array($res_songs)) {
             }
         }
     }
-}session_start();
-if (!isset($_SESSION['user_id'])) {
-    header('location:index.php');
-    exit;
 }
-
-include('connection.php');
-
-$user_id = $_SESSION['user_id'];
-
-// Lấy danh sách bài hát từ bảng `songs` (cat_id=2 là nhạc Việt Nam)
-$sql_songs = "SELECT * FROM songs WHERE cat_id = 2 ORDER BY song_id ASC";
-$res_songs = mysqli_query($conn, $sql_songs);
-
-while ($song = mysqli_fetch_array($res_songs)) {
-    $song_id = $song['song_id'];
-
-    // Nếu tồn tại POST[$song_id], nghĩa là form của bài hát này được submit
-    if (isset($_POST[$song_id])) {
-        // Kiểm tra đã có trong bảng favorite_songs chưa
-        $check_sql = "SELECT * FROM favorite_songs WHERE song_id = '$song_id' AND user_id = '$user_id'";
-        $check_res = mysqli_query($conn, $check_sql);
-
-        if (mysqli_num_rows($check_res) > 0) {
-            // Đã có sẵn => Hiển thị cảnh báo
-            echo '<script>
-                setTimeout(function(){
-                    Swal.fire("Warning", "<b>You have already added this song to your favorite list!</b>", "error");
-                }, 500);
-            </script>';
-        } else {
-            // Chưa có => Thêm vào favorite_songs
-            $insert_sql = "INSERT INTO favorite_songs (user_id, song_id) VALUES ('$user_id', '$song_id')";
-            $insert_res = mysqli_query($conn, $insert_sql);
-
-            if ($insert_res) {
-                $song_name = $song['song_name']; // để hiển thị cho người dùng biết bài nào đã thêm
-                echo '<script>
-                    setTimeout(function(){
-                        Swal.fire("Added", "<b>Song ' . $song_name . ' is successfully added to your favorite songs</b>", "success");
-                    }, 500);
-                </script>';
-            } else {
-                echo '<script>
-                    setTimeout(function(){
-                        Swal.fire("Oops...", "<b>Error while adding. Please check your internet connection!</b>", "error");
-                    }, 500);
-                </script>';
-            }
-        }
-    }
-}
-
-
 ?>
 
 <!DOCTYPE HTML>
