@@ -217,7 +217,7 @@ mysqli_stmt_close($stmt);
 
 		/* Riêng page này */
 		.scroll-container {
-		max-height: 600px; 
+		max-height: 1000px; 
 		overflow-y: auto;
 		overflow-x: hidden;
 	}
@@ -263,9 +263,8 @@ mysqli_stmt_close($stmt);
         </div>
     </header>
     <!-- Hiển thị danh sách bài hát yêu thích -->
-    <div class="container mt-5">
-		<h2 class="text-center mb-4">Your Favorite Songs</h2>
-		
+    <section >
+	<div class="container mt-5" >		
 		<div class="scroll-container p-2">
 			<div class="row">
 				<?php foreach ($songs as $song): ?>
@@ -290,6 +289,7 @@ mysqli_stmt_close($stmt);
 			</div>
 		</div>
 	</div>
+	</section>
 
     <!-- contact top -->
 	<div class="contact-top text-center" id="more_info">
