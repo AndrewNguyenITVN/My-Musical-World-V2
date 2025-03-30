@@ -1,8 +1,8 @@
 <?php
 session_start();
 if (!isset($_SESSION['user_id'])) {
-    header('location:index.php');
-    exit;
+	header('location:index.php');
+	exit;
 }
 
 include('connection.php');
@@ -14,43 +14,62 @@ $sql_songs = "SELECT * FROM songs WHERE cat_id = 2 ORDER BY song_id ASC";
 $res_songs = mysqli_query($conn, $sql_songs);
 
 while ($song = mysqli_fetch_array($res_songs)) {
-    $song_id = $song['song_id'];
+	$song_id = $song['song_id'];
 
-    // Nếu tồn tại POST[$song_id], nghĩa là form của bài hát này được submit
-    if (isset($_POST[$song_id])) {
-        // Kiểm tra đã có trong bảng favorite_songs chưa
-        $check_sql = "SELECT * FROM favorite_songs WHERE song_id = '$song_id' AND user_id = '$user_id'";
-        $check_res = mysqli_query($conn, $check_sql);
+	// Nếu tồn tại POST[$song_id], nghĩa là form của bài hát này được submit
+	if (isset($_POST[$song_id])) {
+		// Kiểm tra đã có trong bảng favorite_songs chưa
+		$check_sql = "SELECT * FROM favorite_songs WHERE song_id = '$song_id' AND user_id = '$user_id'";
+		$check_res = mysqli_query($conn, $check_sql);
 
-        if (mysqli_num_rows($check_res) > 0) {
-            // Đã có sẵn => Hiển thị cảnh báo
-            echo '<script>
+		if (mysqli_num_rows($check_res) > 0) {
+			// Đã có sẵn => Hiển thị cảnh báo
+			echo '<script>
                 setTimeout(function(){
-                    Swal.fire("Warning", "<b>You have already added this song to your favorite list!</b>", "error");
+                    Swal.fire({
+                        title: "Warning",
+                        html: "<b>You have already added this song to your favorite list!</b>",
+                        icon: "error",
+                        showConfirmButton: false, // Ẩn nút OK
+                        timer: 1500 // Tự động đóng sau 1.5 giây
+                    });
                 }, 500);
             </script>';
-        } else {
-            // Chưa có => Thêm vào favorite_songs
-            $insert_sql = "INSERT INTO favorite_songs (user_id, song_id) VALUES ('$user_id', '$song_id')";
-            $insert_res = mysqli_query($conn, $insert_sql);
+		} else {
+			// Chưa có => Thêm vào favorite_songs
+			$insert_sql = "INSERT INTO favorite_songs (user_id, song_id) VALUES ('$user_id', '$song_id')";
+			$insert_res = mysqli_query($conn, $insert_sql);
 
-            if ($insert_res) {
-                $song_name = $song['song_name']; // để hiển thị cho người dùng biết bài nào đã thêm
-                echo '<script>
+			if ($insert_res) {
+				$song_name = htmlspecialchars($song['song_name']); // Bảo vệ dữ liệu đầu ra
+				echo '<script>
                     setTimeout(function(){
-                        Swal.fire("Added", "<b>Song ' . $song_name . ' is successfully added to your favorite songs</b>", "success");
+                        Swal.fire({
+                            title: "Added",
+                            html: "<b>Song ' . $song_name . ' is successfully added to your favorite songs</b>",
+                            icon: "success",
+                            showConfirmButton: false, // Ẩn nút OK
+                            timer: 1500 // Tự động đóng sau 1.5 giây
+                        });
                     }, 500);
                 </script>';
-            } else {
-                echo '<script>
+			} else {
+				echo '<script>
                     setTimeout(function(){
-                        Swal.fire("Oops...", "<b>Error while adding. Please check your internet connection!</b>", "error");
+                        Swal.fire({
+                            title: "Oops...",
+                            html: "<b>Error while adding. Please check your internet connection!</b>",
+                            icon: "error",
+                            showConfirmButton: false, // Ẩn nút OK
+                            timer: 1500 // Tự động đóng sau 1.5 giây
+                        });
                     }, 500);
                 </script>';
-            }
-        }
-    }
+			}
+		}
+	}
 }
+
 
 mysqli_data_seek($res_songs, 0);
 ?>
@@ -89,143 +108,17 @@ mysqli_data_seek($res_songs, 0);
 	<script src="js/jquery-2.2.3.min.js"></script>
 	<!-- js-->
 	<script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+	
+	<link rel="stylesheet" href="css/card.css">
+
 	<style>
 		@import url('https://fonts.googleapis.com/css?family=Raleway:400,400i,500,500i,600,600i,700,700i,800,800i,900,900i|Roboto+Condensed:400,400i,700,700i');
-
-		section {
-			padding: 100px 0;
-		}
-
-		.details-card {
-			background: #1f1f1f;
-		}
-
-		.card-content {
-			background: #ffffff;
-			border: 4px;
-			box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .12);
-		}
-
-		.card-img {
-			position: relative;
-			overflow: hidden;
-			border-radius: 0;
-			z-index: 1;
-		}
-
-		.card-img img {
-			width: 100%;
-			height: auto;
-			display: block;
-		}
-
-		.card-img img:hover {
-			-webkit-transform: scale(1.1);
-			transform: scale(1.1);
-			-webkit-transition: all 0.5s;
-			transition: all 0.5s;
-		}
-
-		.card-img img:not(:hover) {
-			-webkit-transform: scale(1.0);
-			transform: scale(1.0);
-			-webkit-transition: all 0.5s;
-			transition: all 0.5s;
-		}
-
-		.card-img span {
-			position: absolute;
-			top: 15%;
-			left: 12%;
-			background: #1ABC9C;
-			padding: 6px;
-			color: #fff;
-			font-size: 12px;
-			border-radius: 4px;
-			-webkit-border-radius: 4px;
-			-moz-border-radius: 4px;
-			-ms-border-radius: 4px;
-			-o-border-radius: 4px;
-			transform: translate(-50%, -50%);
-		}
-
-		.card-img span h4 {
-			font-size: 12px;
-			margin: 0;
-			padding: 10px 5px;
-			line-height: 0;
-		}
-
-		.card-desc {
-			padding-top: 15px;
-		}
-
-		.card-desc h3 {
-			color: #fff;
-			font-weight: 600;
-			font-size: 1.0em;
-			line-height: 1.3em;
-			margin-top: 0;
-			margin-bottom: 5px;
-			padding: 0;
-		}
-
-		.card-desc p {
-			color: #747373;
-			font-size: 14px;
-			font-weight: 400;
-			font-size: 1em;
-			line-height: 1.5;
-			margin: 0px;
-			margin-bottom: 20px;
-			padding: 0;
-			font-family: 'Raleway', sans-serif;
-		}
-
-		.btn-card {
-			background-color: #b2b2b2;
-			color: #fff;
-			box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .12);
-			padding: .84rem 2.14rem;
-			font-size: .81rem;
-			-webkit-transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, -webkit-box-shadow .15s ease-in-out;
-			transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, -webkit-box-shadow .15s ease-in-out;
-			-o-transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
-			transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
-			transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out, -webkit-box-shadow .15s ease-in-out;
-			margin: 0;
-			border: 0;
-			-webkit-border-radius: .125rem;
-			border-radius: .125rem;
-			cursor: pointer;
-			text-transform: uppercase;
-			white-space: normal;
-			word-wrap: break-word;
-			color: #fff;
-		}
-
-		.btn-card:hover {
-			background: red;
-		}
-
-		a.btn-card {
-			text-decoration: none;
-			color: #fff;
-		}
-
-		.col-md-3 {
-			padding-bottom: 30px;
-			padding-left: 10px;
-			margin-left: 20px;
-			margin-right: 50px;
-		}
-
 		/* End card section */
 	</style>
 
 
 	<script>
-		$(document).ready(function () {
+		$(document).ready(function() {
 			// Map file => cat_id
 			const albumInfo = {
 				"vietnam_songs.php": 2,
@@ -254,7 +147,7 @@ mysqli_data_seek($res_songs, 0);
 						page_no: page,
 						cat_id: catId
 					},
-					success: function (response) {
+					success: function(response) {
 						try {
 							let data = typeof response === 'object' ? response : JSON.parse(response);
 							$("#song-list").html(data.songs);
@@ -264,7 +157,7 @@ mysqli_data_seek($res_songs, 0);
 							$("#song-list").html("<div class='alert alert-danger'>Cannot load song list</div>");
 						}
 					},
-					error: function (xhr, status, error) {
+					error: function(xhr, status, error) {
 						console.error("AJAX Error:", error);
 						$("#song-list").html("<div class='alert alert-danger'>Server connection error</div>");
 					}
@@ -275,14 +168,14 @@ mysqli_data_seek($res_songs, 0);
 			loadSongs(1);
 
 			// Phân trang
-			$(document).on("click", ".pagination a", function (e) {
+			$(document).on("click", ".pagination a", function(e) {
 				e.preventDefault();
 				const page = $(this).data("page");
 				loadSongs(page);
 			});
 
 			// Thêm vào danh sách yêu thích
-			$(document).on("click", ".add-to-fav", function () {
+			$(document).on("click", ".add-to-fav", function() {
 				const songId = $(this).data("songid");
 				const heartIcon = $(this).find("i.fa-heart");
 
@@ -293,12 +186,19 @@ mysqli_data_seek($res_songs, 0);
 					data: JSON.stringify({
 						song_id: songId
 					}),
-					success: function (response) {
+					success: function(response) {
 						try {
 							let data = typeof response === 'object' ? response : JSON.parse(response);
 							if (data.status === 'success') {
 								heartIcon.addClass('text-danger');
-								Swal.fire('Success', data.message, 'success');
+								Swal.fire({
+									title: 'Success',
+									text: data.message,
+									icon: 'success',
+									showConfirmButton: false,
+									timer: 1000
+								});
+
 							} else {
 								Swal.fire(
 									data.status === 'warning' ? 'Warning' : 'Error',
@@ -311,7 +211,7 @@ mysqli_data_seek($res_songs, 0);
 							Swal.fire('Error', 'Invalid response from server', 'error');
 						}
 					},
-					error: function (xhr, status, error) {
+					error: function(xhr, status, error) {
 						console.error("Favorite AJAX Error:", error);
 						try {
 							let response = JSON.parse(xhr.responseText);
@@ -323,7 +223,7 @@ mysqli_data_seek($res_songs, 0);
 				});
 			});
 		});
-		</script>
+	</script>
 </head>
 
 <body>
@@ -405,7 +305,7 @@ mysqli_data_seek($res_songs, 0);
 					<div class="fv3-contact">
 						<div class="row">
 							<div class="col-2">
-								<span ><box-icon name='envelope' type='solid'></box-icon></span>
+								<span><box-icon name='envelope' type='solid'></box-icon></span>
 							</div>
 							<div class="col-10">
 								<h6>email</h6>
@@ -429,7 +329,7 @@ mysqli_data_seek($res_songs, 0);
 					<div class="fv3-contact">
 						<div class="row">
 							<div class="col-2">
-								<span><box-icon name='home' type='solid' ></box-icon></span>
+								<span><box-icon name='home' type='solid'></box-icon></span>
 							</div>
 							<div class="col-10">
 								<h6>address</h6>

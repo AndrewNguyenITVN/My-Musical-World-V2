@@ -34,9 +34,9 @@
 			font-family: 'Ubuntu', sans-serif;
 		}
 		.scroll-container {
-		max-height: 1000px; 
-		overflow-y: auto;
-		overflow-x: hidden;
+			max-height: 1000px; 
+			overflow-y: auto;
+			overflow-x: hidden;
 		}
 	</style>
 </head>
@@ -124,6 +124,11 @@
 	mysqli_stmt_close($stmt);
 ?>
 	<!-- Danh sách nhạc -->
+	<<div class="alert alert-primary" role="alert">
+        <center>
+            <h4 class="text-center  text-blue p-2 rounded">My Music List</h4>
+        </center>
+    </div>
 	<div class="container mt-5" >		
 		<div class="scroll-container p-2">
 			<div class="row">
@@ -132,7 +137,7 @@
 						<div class="card">
 							<img src="songs/img/<?= htmlspecialchars($song['song_image']) ?>" class="card-img-top" alt="<?= htmlspecialchars($song['song_name']) ?>">
 							<div class="card-body">
-								<h5 class="card-title" style="color: white; padding: 10px 0; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; line-height: 10px; height: 24px;" ><?= htmlspecialchars($song['song_name']) ?></h5>
+								<h5 class="card-title" style="color: white; padding: 5px 0; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; line-height: 20px; height: 24px;" ><?= htmlspecialchars($song['song_name']) ?></h5>
 								<p class="card-text" >By <?= htmlspecialchars($song['singer_name']) ?></p>
 								<audio controls style="width: 100%;">
 									<source src="songs/<?= htmlspecialchars($song['audio_file']) ?>" type="audio/mp3">

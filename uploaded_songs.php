@@ -1,8 +1,8 @@
 <?php
 session_start();
 if (!isset($_SESSION['user_id'])) {
-    header('location:index.php');
-    exit;
+	header('location:index.php');
+	exit;
 }
 
 include('connection.php');
@@ -10,33 +10,33 @@ include('connection.php');
 $user_id = $_SESSION['user_id'];
 
 if (isset($_POST['uploaded_songs'])) {
-    // Kiểm tra file upload
-    if (!isset($_FILES['audio_file']) || $_FILES['audio_file']['error'] !== UPLOAD_ERR_OK) {
-        $_SESSION['message'] = '<script type="text/javascript">
+	// Kiểm tra file upload
+	if (!isset($_FILES['audio_file']) || $_FILES['audio_file']['error'] !== UPLOAD_ERR_OK) {
+		$_SESSION['message'] = '<script type="text/javascript">
                 setTimeout(function () { 
                     Swal.fire("Error","Error while uploading. Please check your file!","error");
                 }, 500);
             </script>';
-        header("Location: uploaded_songs.php");
-        exit();
-    }
+		header("Location: uploaded_songs.php");
+		exit();
+	}
 
-    if (!isset($_FILES['song_image']) || $_FILES['song_image']['error'] !== UPLOAD_ERR_OK) {
-        $_SESSION['message'] = '<script type="text/javascript">
+	if (!isset($_FILES['song_image']) || $_FILES['song_image']['error'] !== UPLOAD_ERR_OK) {
+		$_SESSION['message'] = '<script type="text/javascript">
                 setTimeout(function () { 
                     Swal.fire("Error","Error while uploading. Please check your cover image!","error");
                 }, 500);
             </script>';
-        header("Location: uploaded_songs.php");
-        exit();
-    }
-    $audio_file  = $_FILES['audio_file']['name'];
-    $song_name   = mysqli_real_escape_string($conn, $_POST['song_name']);
-    $song_image  = $_FILES['song_image']['name'];
-    $singer_name = mysqli_real_escape_string($conn, $_POST['singer_name']);
+		header("Location: uploaded_songs.php");
+		exit();
+	}
+	$audio_file  = $_FILES['audio_file']['name'];
+	$song_name   = mysqli_real_escape_string($conn, $_POST['song_name']);
+	$song_image  = $_FILES['song_image']['name'];
+	$singer_name = mysqli_real_escape_string($conn, $_POST['singer_name']);
 
-    $singer_id = $user_id;
-    $cat_id    = 2;
+	$singer_id = $user_id;
+	$cat_id    = 2;
 	$language = $_POST['language'] ?? '';
 
 	switch ($language) {
@@ -55,66 +55,66 @@ if (isset($_POST['uploaded_songs'])) {
 			header("Location: uploaded_songs.php");
 			exit();
 	}
-    // Nếu có file nhạc: lấy đường dẫn tạm thời và di chuyển file vào thư mục songs/vietnam_albums
-    if (isset($_FILES['audio_file'])) {
-        $file_tmp = $_FILES['audio_file']['tmp_name'];
-        move_uploaded_file($file_tmp, "songs/" . $audio_file);
-    }
-    // Nếu có file ảnh: lấy đường dẫn tạm thời và di chuyển file vào thư mục songs/vietnam_albums/img
-    if (isset($_FILES['song_image'])) {
-        $file_tmp = $_FILES['song_image']['tmp_name'];
-        move_uploaded_file($file_tmp, "songs/img/" . $song_image);
-    }
-     $sql = "INSERT INTO songs(`singer_id`, `cat_id`, `song_name`, `singer_name`, `song_image`, `audio_file`)
+	// Nếu có file nhạc: lấy đường dẫn tạm thời và di chuyển file vào thư mục songs/vietnam_albums
+	if (isset($_FILES['audio_file'])) {
+		$file_tmp = $_FILES['audio_file']['tmp_name'];
+		move_uploaded_file($file_tmp, "songs/" . $audio_file);
+	}
+	// Nếu có file ảnh: lấy đường dẫn tạm thời và di chuyển file vào thư mục songs/vietnam_albums/img
+	if (isset($_FILES['song_image'])) {
+		$file_tmp = $_FILES['song_image']['tmp_name'];
+		move_uploaded_file($file_tmp, "songs/img/" . $song_image);
+	}
+	$sql = "INSERT INTO songs(`singer_id`, `cat_id`, `song_name`, `singer_name`, `song_image`, `audio_file`)
             VALUES($singer_id, $cat_id, '$song_name', '$singer_name', '$song_image', '$audio_file')";
-    $result = mysqli_query($conn, $sql);
-    if ($result) {
-        $_SESSION['message'] = '<script type="text/javascript">
+	$result = mysqli_query($conn, $sql);
+	if ($result) {
+		$_SESSION['message'] = '<script type="text/javascript">
                 setTimeout(function () { 
                   Swal.fire("Uploaded"," <b>Uploaded song successfully ' . $song_name . '</b>","success");
                 }, 500);
               </script>';
-        header("Location: uploaded_songs.php");
-        exit();
-    } else {
-        $_SESSION['message'] = '<script type="text/javascript">
+		header("Location: uploaded_songs.php");
+		exit();
+	} else {
+		$_SESSION['message'] = '<script type="text/javascript">
                 setTimeout(function () { 
                   Swal.fire("Error","Error while uploading. Please check your internet connection!","error");
                 }, 500);
               </script>';
-        header("Location: uploaded_songs.php");
-        exit();
-    }
+		header("Location: uploaded_songs.php");
+		exit();
+	}
 }
 
 
 /* ===== XỬ LÝ DELETE SONG ===== */
 if (isset($_POST['delete_song_id'])) {
-    $delete_song_id  = $_POST['delete_song_id'];
-    $sql_del = "SELECT * FROM songs WHERE song_id='$delete_song_id'";
-    $result = mysqli_query($conn, $sql_del);
-    $row = mysqli_fetch_array($result);
-    $song_name = $row['song_name'];
+	$delete_song_id  = $_POST['delete_song_id'];
+	$sql_del = "SELECT * FROM songs WHERE song_id='$delete_song_id'";
+	$result = mysqli_query($conn, $sql_del);
+	$row = mysqli_fetch_array($result);
+	$song_name = $row['song_name'];
 
-    $sql_del = "DELETE FROM songs WHERE song_id='$delete_song_id'";
-    $result = mysqli_query($conn, $sql_del);
-    if ($result) {
-        $_SESSION['message'] = '<script type="text/javascript">
+	$sql_del = "DELETE FROM songs WHERE song_id='$delete_song_id'";
+	$result = mysqli_query($conn, $sql_del);
+	if ($result) {
+		$_SESSION['message'] = '<script type="text/javascript">
                 setTimeout(function () { 
                   sweetAlert("Deleted"," <b>Deleted song successfully ' . $song_name . '</b>","success");
                 }, 500);
               </script>';
-        header("Location: uploaded_songs.php");
-        exit();
-    } else {
-        $_SESSION['message'] = '<script type="text/javascript">
+		header("Location: uploaded_songs.php");
+		exit();
+	} else {
+		$_SESSION['message'] = '<script type="text/javascript">
                 setTimeout(function () { 
                   sweetAlert("Error","Error while deleting. Please check your internet connection!","error");
                 }, 500);
               </script>';
-        header("Location: uploaded_songs.php");
-        exit();
-    }
+		header("Location: uploaded_songs.php");
+		exit();
+	}
 }
 
 
@@ -124,42 +124,42 @@ $sql_songs = "SELECT * FROM songs WHERE singer_id = '$user_id' ORDER BY song_id 
 $res_songs = mysqli_query($conn, $sql_songs);
 
 while ($song = mysqli_fetch_array($res_songs)) {
-    $song_id = $song['song_id'];
+	$song_id = $song['song_id'];
 
-    // Nếu tồn tại POST[$song_id], nghĩa là form của bài hát này được submit
-    if (isset($_POST[$song_id])) {
-        // Kiểm tra đã có trong bảng favorite_songs chưa
-        $check_sql = "SELECT * FROM favorite_songs WHERE song_id = '$song_id' AND user_id = '$user_id'";
-        $check_res = mysqli_query($conn, $check_sql);
+	// Nếu tồn tại POST[$song_id], nghĩa là form của bài hát này được submit
+	if (isset($_POST[$song_id])) {
+		// Kiểm tra đã có trong bảng favorite_songs chưa
+		$check_sql = "SELECT * FROM favorite_songs WHERE song_id = '$song_id' AND user_id = '$user_id'";
+		$check_res = mysqli_query($conn, $check_sql);
 
-        if (mysqli_num_rows($check_res) > 0) {
-            // Đã có sẵn => Hiển thị cảnh báo
-            echo '<script>
+		if (mysqli_num_rows($check_res) > 0) {
+			// Đã có sẵn => Hiển thị cảnh báo
+			echo '<script>
                 setTimeout(function(){
                     Swal.fire("Warning", "<b>You have already added this song to your favorite list!</b>", "error");
                 }, 500);
             </script>';
-        } else {
-            // Chưa có => Thêm vào favorite_songs
-            $insert_sql = "INSERT INTO favorite_songs (user_id, song_id) VALUES ('$user_id', '$song_id')";
-            $insert_res = mysqli_query($conn, $insert_sql);
+		} else {
+			// Chưa có => Thêm vào favorite_songs
+			$insert_sql = "INSERT INTO favorite_songs (user_id, song_id) VALUES ('$user_id', '$song_id')";
+			$insert_res = mysqli_query($conn, $insert_sql);
 
-            if ($insert_res) {
-                $song_name = $song['song_name']; // để hiển thị cho người dùng biết bài nào đã thêm
-                echo '<script>
+			if ($insert_res) {
+				$song_name = $song['song_name']; // để hiển thị cho người dùng biết bài nào đã thêm
+				echo '<script>
                     setTimeout(function(){
                         Swal.fire("Added", "<b>Song ' . $song_name . ' is successfully added to your favorite songs</b>", "success");
                     }, 500);
                 </script>';
-            } else {
-                echo '<script>
+			} else {
+				echo '<script>
                     setTimeout(function(){
                         Swal.fire("Oops...", "<b>Error while adding. Please check your internet connection!</b>", "error");
                     }, 500);
                 </script>';
-            }
-        }
-    }
+			}
+		}
+	}
 }
 
 
@@ -202,138 +202,12 @@ mysqli_data_seek($res_songs, 0);
 	<script src="js/jquery-2.2.3.min.js"></script>
 	<!-- js-->
 	<script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+
+	<link rel="stylesheet" href="css/card.css">
+
 	<style>
 		/* card details start  */
 		@import url('https://fonts.googleapis.com/css?family=Raleway:400,400i,500,500i,600,600i,700,700i,800,800i,900,900i|Roboto+Condensed:400,400i,700,700i');
-
-		section {
-			padding: 100px 0;
-		}
-
-		.details-card {
-			background: #1f1f1f;
-		}
-
-		.card-content {
-			background: #ffffff;
-			border: 4px;
-			box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .12);
-		}
-
-		.card-img {
-			position: relative;
-			overflow: hidden;
-			border-radius: 0;
-			z-index: 1;
-		}
-
-		.card-img img {
-			width: 100%;
-			height: auto;
-			display: block;
-		}
-
-		.card-img img:hover {
-			-webkit-transform: scale(1.1);
-			transform: scale(1.1);
-			-webkit-transition: all 0.5s;
-			transition: all 0.5s;
-		}
-
-		.card-img img:not(:hover) {
-			-webkit-transform: scale(1.0);
-			transform: scale(1.0);
-			-webkit-transition: all 0.5s;
-			transition: all 0.5s;
-		}
-
-		.card-img span {
-			position: absolute;
-			top: 15%;
-			left: 12%;
-			background: #1ABC9C;
-			padding: 6px;
-			color: #fff;
-			font-size: 12px;
-			border-radius: 4px;
-			-webkit-border-radius: 4px;
-			-moz-border-radius: 4px;
-			-ms-border-radius: 4px;
-			-o-border-radius: 4px;
-			transform: translate(-50%, -50%);
-		}
-
-		.card-img span h4 {
-			font-size: 12px;
-			margin: 0;
-			padding: 10px 5px;
-			line-height: 0;
-		}
-
-		.card-desc {
-			padding-top: 15px;
-		}
-
-		.card-desc h3 {
-			color: #fff;
-			font-weight: 600;
-			font-size: 1.0em;
-			line-height: 1.3em;
-			margin-top: 0;
-			margin-bottom: 5px;
-			padding: 0;
-		}
-
-		.card-desc p {
-			color: #747373;
-			font-size: 14px;
-			font-weight: 400;
-			font-size: 1em;
-			line-height: 1.5;
-			margin: 0px;
-			margin-bottom: 20px;
-			padding: 0;
-			font-family: 'Raleway', sans-serif;
-		}
-
-		.btn-card {
-			background-color: #b2b2b2;
-			color: #fff;
-			box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .12);
-			padding: .84rem 2.14rem;
-			font-size: .81rem;
-			-webkit-transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, -webkit-box-shadow .15s ease-in-out;
-			transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, -webkit-box-shadow .15s ease-in-out;
-			-o-transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
-			transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
-			transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out, -webkit-box-shadow .15s ease-in-out;
-			margin: 0;
-			border: 0;
-			-webkit-border-radius: .125rem;
-			border-radius: .125rem;
-			cursor: pointer;
-			text-transform: uppercase;
-			white-space: normal;
-			word-wrap: break-word;
-			color: #fff;
-		}
-
-		.btn-card:hover {
-			background: red;
-		}
-
-		a.btn-card {
-			text-decoration: none;
-			color: #fff;
-		}
-
-		.col-md-3 {
-			padding-bottom: 30px;
-			padding-left: 10px;
-			margin-left: 20px;
-			margin-right: 50px;
-		}
-
 		/* End card section */
 	</style>
 
@@ -387,9 +261,9 @@ mysqli_data_seek($res_songs, 0);
 	<!-- //header -->
 
 	<center><br><b>
-		<div class="alert alert-primary" role="alert">
-			You want to upload your songs?...<a href="#" class="alert-link">Upload below</a>. And get featured.
-		</div><b>
+			<div class="alert alert-primary" role="alert">
+				You want to upload your songs?...<a href="#" class="alert-link">Upload below</a>. And get featured.
+			</div><b>
 	</center>
 
 	<form method="post" action="uploaded_songs.php" enctype="multipart/form-data">
@@ -400,7 +274,7 @@ mysqli_data_seek($res_songs, 0);
 					<div class="form-group">
 						<label class="font-weight-bold color-white">Upload Audio File</label>
 						<div class="input-group">
-							<input type="file" class="form-control bg-primary text-white" name="audio_file" required>
+							<input type="file" class="form-control text-white" name="audio_file" required>
 							<div class="input-group-append">
 								<span class="input-group-text"><i class="fa fa-music"></i></span>
 							</div>
@@ -428,7 +302,7 @@ mysqli_data_seek($res_songs, 0);
 					<div class="form-group">
 						<label class="font-weight-bold color-white">Upload Cover Image</label>
 						<div class="input-group">
-							<input type="file" class="form-control bg-primary text-white" name="song_image" required>
+							<input type="file" class="form-control text-white" name="song_image" required>
 							<div class="input-group-append">
 								<span class="input-group-text"><i class="fa fa-image"></i></span>
 							</div>
@@ -449,7 +323,7 @@ mysqli_data_seek($res_songs, 0);
 					</div>
 				</div>
 
-				
+
 				<!-- Upload Button -->
 				<div class="col-md-4 mt-3 d-flex justify-content-center align-items-center">
 					<button type="submit" name="uploaded_songs" class="btn btn-success btn-lg px-5">
@@ -463,9 +337,9 @@ mysqli_data_seek($res_songs, 0);
 					<div class="form-group">
 						<label class="font-weight-bold color-white"></label>
 						<div class="input-group">
-							
+
 							<div class="input-group-append">
-								
+
 							</div>
 						</div>
 					</div>
@@ -489,24 +363,24 @@ mysqli_data_seek($res_songs, 0);
 				</div>
 
 				<div class="col-md-4 mt-3">
-					
+
 				</div>
 			</div>
 		</div>
 	</form>
 
 	<center><b>
-		<div class="alert alert-primary" role="alert">
-			Most featured songs...<a href="#" class="alert-link color-white">Listen to music </a>. And have fun.
-		</div><b>
+			<div class="alert alert-primary" role="alert">
+				Most featured songs...<a href="#" class="alert-link color-white">Listen to music </a>. And have fun.
+			</div><b>
 	</center>
-	
-    <?php
-    include('connection.php');
+
+	<?php
+	include('connection.php');
 	$user_id = $_SESSION['user_id'];
-    $sql = "SELECT * FROM songs WHERE singer_id = $user_id ORDER BY song_id";
-    $result = mysqli_query($conn, $sql);
-    echo "
+	$sql = "SELECT * FROM songs WHERE singer_id = $user_id ORDER BY song_id";
+	$result = mysqli_query($conn, $sql);
+	echo "
         <div class='card'>
             <h3 class='card-header text-center font-weight-bold text-uppercase py-4'>Uploaded Songs</h3>
             <div class='card-body p-0'>
@@ -523,14 +397,14 @@ mysqli_data_seek($res_songs, 0);
                         </thead>
                         <tbody>
         ";
-    $count = 0;
-    while ($row = mysqli_fetch_array($result)) {
-        $count++;
-        $song_id = $row['song_id'];
-        $song_name = $row['song_name'];
-        $singer_name = $row['singer_name'];
-        $audio_file = $row['audio_file'];
-        echo "
+	$count = 0;
+	while ($row = mysqli_fetch_array($result)) {
+		$count++;
+		$song_id = $row['song_id'];
+		$song_name = $row['song_name'];
+		$singer_name = $row['singer_name'];
+		$audio_file = $row['audio_file'];
+		echo "
                 <tr>
                     <td class='pt-3-half'>" . $count . "</td>
                     <td class='pt-3-half'>" . $song_name . "</td>
@@ -552,17 +426,17 @@ mysqli_data_seek($res_songs, 0);
                     </td>
                 </tr>
             ";
-        }
+	}
 
-        echo "
+	echo "
                         </tbody>
                     </table>
                 </div>
             </div>
         </div><br>
         ";
-    ?>
-									
+	?>
+
 
 	<!-- contact top -->
 	<div class="contact-top text-center" id="more_info">
@@ -584,7 +458,7 @@ mysqli_data_seek($res_songs, 0);
 					<div class="fv3-contact">
 						<div class="row">
 							<div class="col-2">
-								<span ><box-icon name='envelope' type='solid'></box-icon></span>
+								<span><box-icon name='envelope' type='solid'></box-icon></span>
 							</div>
 							<div class="col-10">
 								<h6>email</h6>
@@ -608,7 +482,7 @@ mysqli_data_seek($res_songs, 0);
 					<div class="fv3-contact">
 						<div class="row">
 							<div class="col-2">
-								<span><box-icon name='home' type='solid' ></box-icon></span>
+								<span><box-icon name='home' type='solid'></box-icon></span>
 							</div>
 							<div class="col-10">
 								<h6>address</h6>
@@ -684,7 +558,7 @@ mysqli_data_seek($res_songs, 0);
 			});
 		});
 	</script>
-	
+
 	<!-- Bootstrap Core JavaScript -->
 	<script src="js/bootstrap.js"></script>
 	<!-- //Bootstrap Core JavaScript -->
@@ -738,22 +612,35 @@ mysqli_data_seek($res_songs, 0);
 			});
 		});
 	</script>
-	 <script>
-        function confirmDelete(formId, songName) {
-            Swal.fire({
-                title: "Are you sure?",
-                text: "Are you sure you want to delete the song: " + songName + "?",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonText: "Yes, delete it!",
-                cancelButtonText: "Cancel"
-            }).then((result) => {
-                if (result.value) {
-                    document.getElementById(formId).submit();
-                }
-            });
-        }
-    </script>
+	<script>
+		function confirmDelete(formId, songName) {
+			Swal.fire({
+				title: "Are you sure?",
+				text: "Are you sure you want to delete the song: " + songName + "?",
+				icon: "warning",
+				showCancelButton: true,
+				confirmButtonText: "Yes, delete it!",
+				cancelButtonText: "Cancel"
+			}).then((result) => {
+				if (result.isConfirmed) {
+					
+					Swal.fire({
+						title: "Deleted!",
+						text: "The song '" + songName + "' has been deleted.",
+						icon: "success",
+						timer: 1500,
+						showConfirmButton: false
+					});
+
+					
+					setTimeout(() => {
+						document.getElementById(formId).submit();
+					}, 1600); 
+				}
+			});
+		}
+	</script>
+
 </body>
 
 </html>
