@@ -87,138 +87,12 @@ while ($song = mysqli_fetch_array($res_songs)) {
 	<script src="js/jquery-2.2.3.min.js"></script>
 	<!-- js-->
 	<script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+
+	<link rel="stylesheet" href="css/card.css">
+	
 	<style>
 		/* card details start  */
 		@import url('https://fonts.googleapis.com/css?family=Raleway:400,400i,500,500i,600,600i,700,700i,800,800i,900,900i|Roboto+Condensed:400,400i,700,700i');
-
-		section {
-			padding: 100px 0;
-		}
-
-		.details-card {
-			background: #1f1f1f;
-		}
-
-		.card-content {
-			background: #ffffff;
-			border: 4px;
-			box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .12);
-		}
-
-		.card-img {
-			position: relative;
-			overflow: hidden;
-			border-radius: 0;
-			z-index: 1;
-		}
-
-		.card-img img {
-			width: 100%;
-			height: auto;
-			display: block;
-		}
-
-		.card-img img:hover {
-			-webkit-transform: scale(1.1);
-			transform: scale(1.1);
-			-webkit-transition: all 0.5s;
-			transition: all 0.5s;
-		}
-
-		.card-img img:not(:hover) {
-			-webkit-transform: scale(1.0);
-			transform: scale(1.0);
-			-webkit-transition: all 0.5s;
-			transition: all 0.5s;
-		}
-
-		.card-img span {
-			position: absolute;
-			top: 15%;
-			left: 12%;
-			background: #1ABC9C;
-			padding: 6px;
-			color: #fff;
-			font-size: 12px;
-			border-radius: 4px;
-			-webkit-border-radius: 4px;
-			-moz-border-radius: 4px;
-			-ms-border-radius: 4px;
-			-o-border-radius: 4px;
-			transform: translate(-50%, -50%);
-		}
-
-		.card-img span h4 {
-			font-size: 12px;
-			margin: 0;
-			padding: 10px 5px;
-			line-height: 0;
-		}
-
-		.card-desc {
-			padding-top: 15px;
-		}
-
-		.card-desc h3 {
-			color: #fff;
-			font-weight: 600;
-			font-size: 1.0em;
-			line-height: 1.3em;
-			margin-top: 0;
-			margin-bottom: 5px;
-			padding: 0;
-		}
-
-		.card-desc p {
-			color: #747373;
-			font-size: 14px;
-			font-weight: 400;
-			font-size: 1em;
-			line-height: 1.5;
-			margin: 0px;
-			margin-bottom: 20px;
-			padding: 0;
-			font-family: 'Raleway', sans-serif;
-		}
-
-		.btn-card {
-			background-color: #b2b2b2;
-			color: #fff;
-			box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .12);
-			padding: .84rem 2.14rem;
-			font-size: .81rem;
-			-webkit-transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, -webkit-box-shadow .15s ease-in-out;
-			transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, -webkit-box-shadow .15s ease-in-out;
-			-o-transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
-			transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
-			transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out, -webkit-box-shadow .15s ease-in-out;
-			margin: 0;
-			border: 0;
-			-webkit-border-radius: .125rem;
-			border-radius: .125rem;
-			cursor: pointer;
-			text-transform: uppercase;
-			white-space: normal;
-			word-wrap: break-word;
-			color: #fff;
-		}
-
-		.btn-card:hover {
-			background: red;
-		}
-
-		a.btn-card {
-			text-decoration: none;
-			color: #fff;
-		}
-
-		.col-md-3 {
-			padding-bottom: 30px;
-			padding-left: 10px;
-			margin-left: 20px;
-			margin-right: 50px;
-		}
-
 		/* End card section */
 	</style>
 
@@ -297,7 +171,13 @@ while ($song = mysqli_fetch_array($res_songs)) {
 							let data = typeof response === 'object' ? response : JSON.parse(response);
 							if (data.status === 'success') {
 								heartIcon.addClass('text-danger');
-								Swal.fire('Success', data.message, 'success');
+								Swal.fire({
+									title: 'Success',
+									text: data.message,
+									icon: 'success',
+									showConfirmButton: false,
+									timer: 1000
+								});
 							} else {
 								Swal.fire(
 									data.status === 'warning' ? 'Warning' : 'Error',

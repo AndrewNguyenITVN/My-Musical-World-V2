@@ -50,14 +50,15 @@ while ($row = mysqli_fetch_assoc($res_songs)) {
     $image_path = "songs/img/$song_image";
     $audio_path = "songs/$audio_file";
         $songs .= "
-            <div class='col-md-3'>
-                <div class='card-deck'>
-                    <div class='card-img'>
-                        <img src='$image_path' style='width:300px;height:250px' alt=''>
-                    </div>
-                    <div class='card-desc'>
-                        <h3 style='padding: 10px 0; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; line-height: 14px; height: 24px;'>$song_name | $singer_name</h3>
-                        <audio class='embed-responsive-item' controls='' preload='none'> 
+            <div class='col-md-4 mb-4'>
+                <div class='card'>
+
+                        <img class='card-img-top' src='$image_path' alt=''>
+
+                    <div class='card-body'>
+                        <h5 class='card-title' style='color: white; padding: 5px 0; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; line-height: 20px; height: 24px;'>$song_name</h5>
+                        <p class='card-text' >By $singer_name </p>
+                        <audio controls style='width: 100%;' controls='' preload='none'> 
                             <source src='$audio_path' type='audio/mp3'>
                         </audio><br>
                         <button class='btn-card add-to-fav' data-songid='$song_id' data-catid='$cat_id'>

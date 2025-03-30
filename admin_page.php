@@ -717,20 +717,32 @@ if (isset($_POST['upload_english'])) {
 
     <!-- Custom JS: Xác nhận xóa và mở modal update -->
     <script>
-        function confirmDelete(formId, songName) {
-            swal({
-                title: "Are you sure?",
-                text: "Are you sure you want to delete the song: " + songName + "?",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonText: "Yes, delete it!",
-                cancelButtonText: "Cancel"
-            }).then((result) => {
-                if (result.value) {
-                    document.getElementById(formId).submit();
-                }
-            });
-        }
+		function confirmDelete(formId, songName) {
+			Swal.fire({
+				title: "Are you sure?",
+				text: "Are you sure you want to delete the song: " + songName + "?",
+				icon: "warning",
+				showCancelButton: true,
+				confirmButtonText: "Yes, delete it!",
+				cancelButtonText: "Cancel"
+			}).then((result) => {
+				if (result.isConfirmed) {
+					
+					Swal.fire({
+						title: "Deleted!",
+						text: "The song '" + songName + "' has been deleted.",
+						icon: "success",
+						timer: 1500,
+						showConfirmButton: false
+					});
+
+					
+					setTimeout(() => {
+						document.getElementById(formId).submit();
+					}, 1600); 
+				}
+			});
+		}
 
         function openUpdateModal(song_id, song_name, singer_name, category) {
             document.getElementById("update_song_id").value = song_id;
