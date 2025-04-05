@@ -1,6 +1,6 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7"></script>
 <?php
-// Thêm extension session 
+// Kiểm tra và khởi tạo session
 if (extension_loaded('session')) {
     if (!isset($_SESSION)) {
         session_start();
@@ -9,10 +9,12 @@ if (extension_loaded('session')) {
     die('PHP Session extension is not loaded');
 }
 
+// Xử lý đăng ký tài khoản
 if (isset($_POST['register'])) {
 
-    include('connection.php');
+    include('connection.php'); // Kết nối database
 
+    // Lấy và làm sạch dữ liệu từ form
     $username = mysqli_real_escape_string($conn, trim($_POST['username']));
     $mobile_number = mysqli_real_escape_string($conn, trim($_POST['mobile_number']));
     $email_address = mysqli_real_escape_string($conn, trim($_POST['email_address']));
@@ -34,7 +36,6 @@ if (isset($_POST['register'])) {
         echo '<script type="text/javascript">
             document.addEventListener("DOMContentLoaded", function() {
                 sweetAlert("Oops...", "Password must be at least 6 characters!", "error");
-
             });
         </script>';
         return;
@@ -45,22 +46,26 @@ if (isset($_POST['register'])) {
         echo '<script type="text/javascript">
             document.addEventListener("DOMContentLoaded", function() {
                 sweetAlert("Oops...", "Passwords do not match!", "error");
-
             });
         </script>';
         return;
     }
 
+    // Kiểm tra định dạng email hợp lệ
     if (preg_match("/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/", $email_address)) {
+        // Kiểm tra định dạng số điện thoại hợp lệ
         if (preg_match("/^(\+?\d{1,4})?[-.\s]?(\()?(\d{1,3})(?(2)\))[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/", $mobile_number)) {
 
+            // Kiểm tra email đã tồn tại chưa
             $sql_email = "SELECT email_address FROM user WHERE email_address='$email_address'";
             $result_email = mysqli_query($conn, $sql_email);
 
+            // Kiểm tra số điện thoại đã tồn tại chưa
             $sql_mobile = "SELECT mobile_number FROM user WHERE mobile_number='$mobile_number'";
             $result_mobile = mysqli_query($conn, $sql_mobile);
 
             if (mysqli_num_rows($result_email) > 0) {
+                // Hiển thị thông báo nếu email đã tồn tại
                 echo '<script type="text/javascript">';
                 echo 'setTimeout(function () { 
                             Swal.fire({
@@ -74,6 +79,7 @@ if (isset($_POST['register'])) {
                           }, 500);';
                 echo '</script>';
             } else if (mysqli_num_rows($result_mobile) > 0) {
+                // Hiển thị thông báo nếu số điện thoại đã tồn tại
                 echo '<script type="text/javascript">';
                 echo 'setTimeout(function () { 
                             Swal.fire({
@@ -87,9 +93,11 @@ if (isset($_POST['register'])) {
                           }, 500);';
                 echo '</script>';
             } else {
+                // Tạo mã kích hoạt và hash mật khẩu
                 $activation_code = hash('sha256', mt_rand(0, 1000));
                 $hash_password = md5($password);
 
+                // Thêm tài khoản mới vào database
                 $sql = "INSERT INTO user (`username`, `password`, `mobile_number`, `email_address`, `activation_code`) 
                             VALUES ('$username', '$hash_password', '$mobile_number', '$email_address', '$activation_code')";
 
@@ -98,44 +106,49 @@ if (isset($_POST['register'])) {
                 if (!$result) {
                     die("Error while updating!!!...") . mysqli_error($conn);
                 } else {
+                    // Lưu thông tin vào session
                     $_SESSION['username'] = $username;
                     $_SESSION['mobile_number'] = $mobile_number;
                     $_SESSION['email_address'] = $email_address;
                     $_SESSION['activation_code'] = $activation_code;
                     $_SESSION['password'] = $password;
 
+                    // Gửi email kích hoạt
                     include('activate_email.php');
                 }
             }
         } else {
-            //invalid mobile number error message
+            // Hiển thị lỗi nếu số điện thoại không hợp lệ
             echo '<script type="text/javascript">';
             echo 'setTimeout(function () { sweetAlert("Oops...","Mobile number ' . $mobile_number . ' is invalid!","error");';
             echo '}, 500);</script>';
         }
     } else {
-        //email address invalid error messaage
+        // Hiển thị lỗi nếu email không hợp lệ
         echo '<script type="text/javascript">';
         echo 'setTimeout(function () { sweetAlert("Oops...","Email address ' . $email_address . ' is invalid!","error");';
         echo '}, 500);</script>';
     }
 }
 
-
+// Xử lý đăng nhập
 if (isset($_POST['login'])) {
 
-    session_start(); 
+    session_start(); // Bắt đầu session
 
-    include('connection.php');
+    include('connection.php'); // Kết nối database
 
+    // Lấy và làm sạch dữ liệu từ form
     $email_address = mysqli_real_escape_string($conn, $_POST['email_address']);
     $password = mysqli_real_escape_string($conn, $_POST['password']);
-    $hash_password = md5($password);
+    $hash_password = md5($password); // Mã hóa mật khẩu
 
+    // Kiểm tra thông tin đăng nhập
     $sql = "SELECT * FROM user WHERE email_address = '$email_address' AND password = '$hash_password' ";
     $result = mysqli_query($conn, $sql);
 
     if (!$result) {
+        // Hiển thị lỗi nếu có vấn đề khi đăng nhập
         echo '<script type="text/javascript">';
         echo 'setTimeout(function () { sweetAlert("Warning...","Error while loggin in!..","warning");';
         echo '}, 500);</script>';
@@ -143,25 +156,30 @@ if (isset($_POST['login'])) {
         $row = mysqli_fetch_array($result);
         $count = mysqli_num_rows($result);
         $username = $row['username'];
-        $user_id = $row['user_id']; 
+        $user_id = $row['user_id'];
 
         if ($count == 1) {
             if ($row['confirm_status'] == 0) {
+                // Hiển thị thông báo nếu tài khoản chưa kích hoạt
                 echo '<script type="text/javascript">';
                 echo 'setTimeout(function () { sweetAlert("Warning...","Please activate your account first!..","warning");';
                 echo '}, 500);</script>';
             } else {
+                // Lưu thông tin người dùng vào session
                 $_SESSION['username'] = $username;
                 $_SESSION['email_address'] = $email_address;
-                $_SESSION['user_id'] = $user_id; 
+                $_SESSION['user_id'] = $user_id;
 
+                // Kiểm tra nếu là admin thì chuyển hướng đến trang admin
                 if ($email_address == 'admin@gmail.com' && $row['password'] == '21232f297a57a5a743894a0e4a801fc3') {
                     header('location:admin_page.php');
                 } else {
+                    // Người dùng thường chuyển đến trang profile
                     header('location:profile.php');
                 }
             }
         } else {
+            // Hiển thị lỗi nếu thông tin đăng nhập không đúng
             echo '<script type="text/javascript">';
             echo 'setTimeout(function () { sweetAlert("Oops...","Wrong username or Password!...","error");';
             echo '}, 500);</script>';
@@ -169,15 +187,17 @@ if (isset($_POST['login'])) {
     }
 }
 
+// Xử lý quên mật khẩu
 if (isset($_POST['forgot'])) {
-    include('connection.php');
+    include('connection.php'); // Kết nối database
 
     $email_address = mysqli_real_escape_string($conn, $_POST['email_address']);
+    // Kiểm tra email có tồn tại không
     $sql = "SELECT email_address FROM user WHERE email_address = '$email_address'";
     $result = mysqli_query($conn, $sql);
 
     if (mysqli_num_rows($result) == 0) {
-        // Email không tồn tại
+        // Hiển thị thông báo nếu email không tồn tại
 ?>
         <script>
             document.addEventListener('DOMContentLoaded', function() {
@@ -197,13 +217,14 @@ if (isset($_POST['forgot'])) {
         </script>
         <?php
     } else {
+        // Sử dụng PHPMailer để gửi email
         require 'phpmailer/PHPMailerAutoload.php';
 
-        // Tạo token ngẫu nhiên và thời gian hết hạn
+        // Tạo token và thời gian hết hạn (1 giờ)
         $reset_token = bin2hex(random_bytes(32));
         $expiry = date('Y-m-d H:i:s', strtotime('+1 hour'));
 
-        // Lưu token vào database
+        // Cập nhật token vào database
         $update_sql = "UPDATE user SET reset_token = '$reset_token', reset_token_expiry = '$expiry' 
                       WHERE email_address = '$email_address'";
         mysqli_query($conn, $update_sql);
@@ -214,28 +235,25 @@ if (isset($_POST['forgot'])) {
         $row = mysqli_fetch_array($result);
         $username = $row['username'];
 
+        // Tạo link reset mật khẩu
         $reset_link = "http://localhost/webamnhac/My-Musical-World/reset_password.php?token=" . $reset_token . "&email=" . urlencode($email_address);
 
+        // Cấu hình PHPMailer
         $mail = new PHPMailer;
-        // $mail->SMTPDebug = 3;                               // Enable verbose debug output
-
-        $mail->isSMTP();                                      // Set mailer to use SMTP
-        $mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers
-        $mail->SMTPAuth = true;                               // Enable SMTP authentication
-        $mail->Username = 'mymusicworld.2025@gmail.com';                 // SMTP username
-        $mail->Password = 'vtpb htgv btuk xqpa';                         // SMTP password
-        $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
-        $mail->Port = 587;                                    // TCP port to connect to
+        $mail->isSMTP(); // Sử dụng SMTP
+        $mail->Host = 'smtp.gmail.com'; // Máy chủ SMTP
+        $mail->SMTPAuth = true; // Xác thực SMTP
+        $mail->Username = 'mymusicworld.2025@gmail.com'; // Email gửi
+        $mail->Password = 'vtpb htgv btuk xqpa'; // Mật khẩu
+        $mail->SMTPSecure = 'tls'; // Bảo mật TLS
+        $mail->Port = 587; // Cổng kết nối
         $to = $email_address;
         $mail->setFrom('mymusicworld.2025@gmail.com', 'My Musical World');
-        $mail->addAddress($to);     // Add a recipient
-        $mail->SMTPDebug = 0;  // Hiển thị chi tiết lỗi SMTP
-        //$mail->Debugoutput = 'html';
+        $mail->addAddress($to); // Email nhận
+        $mail->SMTPDebug = 0; // Tắt debug
 
-
-        $mail->isHTML(true);                                  // Set email format to HTML
-
-        $mail->Subject = 'Reset Your Account';
+        $mail->isHTML(true); // Định dạng email là HTML
+        $mail->Subject = 'Reset Your Account'; // Tiêu đề email
         $mail->Body = "
         <br><br>
         <b>Hello, " . $username . ",</b><br>
@@ -248,7 +266,7 @@ if (isset($_POST['forgot'])) {
         <b>Musical World</b></pre>";
 
         if (!$mail->send()) {
-            // Gửi email thất bại
+            // Hiển thị lỗi nếu gửi email không thành công
         ?>
             <script>
                 document.addEventListener('DOMContentLoaded', function() {
@@ -268,11 +286,11 @@ if (isset($_POST['forgot'])) {
             </script>
         <?php
         } else {
-            // Gửi email thành công
+            // Hiển thị thông báo thành công nếu gửi email thành công
         ?>
             <script>
                 document.addEventListener('DOMContentLoaded', function() {
-                    sweetAlert({
+                    Swal.fire({
                         title: 'Email Sent!',
                         text: 'A password reset link has been sent to <?php echo $email_address; ?>. Please check your email.',
                         type: 'success',
@@ -283,7 +301,7 @@ if (isset($_POST['forgot'])) {
                     }, function() {
                         document.getElementById('ForgotPasswordModal').style.display = 'none';
                         $('.modal-backdrop').remove();
-                    }).then (function() {
+                    }).then(function() {
                         window.location.href = 'index.php';
                     });
                 });
@@ -293,12 +311,12 @@ if (isset($_POST['forgot'])) {
     }
 }
 
-// Kiểm tra token và email từ URL
+// Xử lý token reset mật khẩu từ URL
 if (isset($_GET['token']) && isset($_GET['email'])) {
     $token = $_GET['token'];
     $email = $_GET['email'];
 
-    // Kiểm tra token có hợp lệ và chưa hết hạn
+    // Kiểm tra token hợp lệ và chưa hết hạn
     $sql = "SELECT * FROM user WHERE email_address = '$email' 
             AND reset_token = '$token' 
             AND reset_token_expiry > NOW()";
@@ -309,21 +327,22 @@ if (isset($_GET['token']) && isset($_GET['email'])) {
         exit();
     }
 
-    // Nếu token hợp lệ, lưu email vào session
+    // Lưu email và token vào session nếu hợp lệ
     session_start();
     $_SESSION['email_address'] = $email;
     $_SESSION['reset_token'] = $token;
 }
 
-// Xử lý khi form reset password được submit
+// Xử lý form reset mật khẩu
 if (isset($_POST['reset'])) {
     $password = mysqli_real_escape_string($conn, $_POST['password']);
     $confirm_password = mysqli_real_escape_string($conn, $_POST['confirm_password']);
     $email = $_SESSION['email_address'];
     $token = $_SESSION['reset_token'];
 
+    // Kiểm tra mật khẩu nhập lại khớp
     if ($password == $confirm_password) {
-        $hash_password = md5($password);
+        $hash_password = md5($password); // Mã hóa mật khẩu mới
 
         // Cập nhật mật khẩu mới và xóa token
         $sql = "UPDATE user SET 
@@ -336,6 +355,7 @@ if (isset($_POST['reset'])) {
         $result = mysqli_query($conn, $sql);
 
         if ($result) {
+            // Hiển thị thông báo thành công
             echo '<script type="text/javascript">';
             echo 'setTimeout(function () { 
                 sweetAlert("Success","Password updated successfully. Please login with your new password.","success");
@@ -343,66 +363,9 @@ if (isset($_POST['reset'])) {
             }, 1000);</script>';
         }
     } else {
+        // Hiển thị lỗi nếu mật khẩu không khớp
         echo '<script type="text/javascript">';
         echo 'setTimeout(function () { sweetAlert("Oops...","The two passwords do not match!","error"); }, 500);</script>';
     }
 }
 ?>
-
-<!DOCTYPE html>
-<html>
-
-<head>
-    <title></title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="KEERTHANA KUTEERA LOGO-BLACK-01.png" type="image/png">
-    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css"> -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sweetalert2@7.28.11/dist/sweetalert2.min.js"></script> -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7"></script> -->
-</head>
-
-<body>
-    <script>
-        // Đảm bảo jQuery đã được load
-        if (typeof jQuery === 'undefined') {
-            document.write('<script src="https://code.jquery.com/jquery-3.6.0.min.js"><\/script>');
-        }
-    </script>
-</body>
-        <!-- Modal Update Song -->
-    <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <form method="post" action="admin_page.php">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="updateModalLabel">Update Song</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <input type="hidden" name="update_song_id" id="update_song_id">
-                        <input type="hidden" name="update_category" id="update_category">
-                        <div class="form-group">
-                            <label for="update_song_name">Song Name</label>
-                            <input type="text" class="form-control" name="update_song_name" id="update_song_name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="update_singer_name">Singer Name</label>
-                            <input type="text" class="form-control" name="update_singer_name" id="update_singer_name" required>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        <button type="submit" name="update_song" class="btn btn-primary">Update</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    <!-- End Modal Update Song -->
-</html>

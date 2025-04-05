@@ -251,12 +251,13 @@ $email_address = $_SESSION['email_address'];
 			});
 		});
 	</script>
-	
+
 	<!-- Bootstrap Core JavaScript -->
 	<script src="js/bootstrap.js">
 	</script>
 	<!-- //Bootstrap Core JavaScript -->
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<!-- send us a mail section -->
 	<script>
 		$(document).ready(function() {
 			$('#contactForm').on('submit', function(e) {
@@ -305,6 +306,7 @@ $email_address = $_SESSION['email_address'];
 			});
 		});
 	</script>
+	<!-- //send us a mail section -->
 </body>
 
 </html>

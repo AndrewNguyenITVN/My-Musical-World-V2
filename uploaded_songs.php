@@ -238,7 +238,6 @@ mysqli_data_seek($res_songs, 0);
 							<button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown"
 								aria-haspopup="true" aria-expanded="false">Track</button>
 							<div class="dropdown-menu dropdown-primary">
-								<!-- <a class="dropdown-item" href="kannada_songs.php"><b>Kannada Songs</b></a> -->
 								<a class="dropdown-item" href="vietnam_songs.php"><b>Vietnam Songs</b></a>
 								<a class="dropdown-item" href="english_songs.php"><b>English Songs</b></a>
 								<a class="dropdown-item" href="uploaded_songs.php"><b>Uploaded Songs</b></a>
@@ -564,6 +563,8 @@ mysqli_data_seek($res_songs, 0);
 	<!-- //Bootstrap Core JavaScript -->
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sweetalert2@7.28.11/dist/sweetalert2.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+	<!-- send us a mail section -->
 	<script>
 		$(document).ready(function() {
 			$('#contactForm').on('submit', function(e) {
@@ -612,6 +613,8 @@ mysqli_data_seek($res_songs, 0);
 			});
 		});
 	</script>
+	<!-- //send us a mail section -->
+	<!-- confirm delete song -->
 	<script>
 		function confirmDelete(formId, songName) {
 			Swal.fire({
@@ -623,7 +626,7 @@ mysqli_data_seek($res_songs, 0);
 				cancelButtonText: "Cancel"
 			}).then((result) => {
 				if (result.isConfirmed) {
-					
+
 					Swal.fire({
 						title: "Deleted!",
 						text: "The song '" + songName + "' has been deleted.",
@@ -632,14 +635,15 @@ mysqli_data_seek($res_songs, 0);
 						showConfirmButton: false
 					});
 
-					
+
 					setTimeout(() => {
 						document.getElementById(formId).submit();
-					}, 1600); 
+					}, 1600);
 				}
 			});
 		}
 	</script>
+	<!-- //confirm delete song -->
 
 </body>
 
