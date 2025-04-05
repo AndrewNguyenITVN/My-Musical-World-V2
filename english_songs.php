@@ -1,8 +1,8 @@
 <?php
 session_start();
 if (!isset($_SESSION['user_id'])) {
-    header('location:index.php');
-    exit;
+	header('location:index.php');
+	exit;
 }
 
 include('connection.php');
@@ -14,42 +14,42 @@ $sql_songs = "SELECT * FROM songs WHERE cat_id = 3 ORDER BY song_id ASC";
 $res_songs = mysqli_query($conn, $sql_songs);
 
 while ($song = mysqli_fetch_array($res_songs)) {
-    $song_id = $song['song_id'];
+	$song_id = $song['song_id'];
 
-    // Nếu tồn tại POST[$song_id], nghĩa là form của bài hát này được submit
-    if (isset($_POST[$song_id])) {
-        // Kiểm tra đã có trong bảng favorite_songs chưa
-        $check_sql = "SELECT * FROM favorite_songs WHERE song_id = '$song_id' AND user_id = '$user_id'";
-        $check_res = mysqli_query($conn, $check_sql);
+	// Nếu tồn tại POST[$song_id], nghĩa là form của bài hát này được submit
+	if (isset($_POST[$song_id])) {
+		// Kiểm tra đã có trong bảng favorite_songs chưa
+		$check_sql = "SELECT * FROM favorite_songs WHERE song_id = '$song_id' AND user_id = '$user_id'";
+		$check_res = mysqli_query($conn, $check_sql);
 
-        if (mysqli_num_rows($check_res) > 0) {
-            // Đã có sẵn => Hiển thị cảnh báo
-            echo '<script>
+		if (mysqli_num_rows($check_res) > 0) {
+			// Đã có sẵn => Hiển thị cảnh báo
+			echo '<script>
                 setTimeout(function(){
                     Swal.fire("Warning", "<b>You have already added this song to your favorite list!</b>", "error");
                 }, 500);
             </script>';
-        } else {
-            // Chưa có => Thêm vào favorite_songs
-            $insert_sql = "INSERT INTO favorite_songs (user_id, song_id) VALUES ('$user_id', '$song_id')";
-            $insert_res = mysqli_query($conn, $insert_sql);
+		} else {
+			// Chưa có => Thêm vào favorite_songs
+			$insert_sql = "INSERT INTO favorite_songs (user_id, song_id) VALUES ('$user_id', '$song_id')";
+			$insert_res = mysqli_query($conn, $insert_sql);
 
-            if ($insert_res) {
-                $song_name = $song['song_name']; // để hiển thị cho người dùng biết bài nào đã thêm
-                echo '<script>
+			if ($insert_res) {
+				$song_name = $song['song_name']; // để hiển thị cho người dùng biết bài nào đã thêm
+				echo '<script>
                     setTimeout(function(){
                         Swal.fire("Added", "<b>Song ' . $song_name . ' is successfully added to your favorite songs</b>", "success");
                     }, 500);
                 </script>';
-            } else {
-                echo '<script>
+			} else {
+				echo '<script>
                     setTimeout(function(){
                         Swal.fire("Oops...", "<b>Error while adding. Please check your internet connection!</b>", "error");
                     }, 500);
                 </script>';
-            }
-        }
-    }
+			}
+		}
+	}
 }
 ?>
 
@@ -89,7 +89,7 @@ while ($song = mysqli_fetch_array($res_songs)) {
 	<script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
 
 	<link rel="stylesheet" href="css/card.css">
-	
+
 	<style>
 		/* card details start  */
 		@import url('https://fonts.googleapis.com/css?family=Raleway:400,400i,500,500i,600,600i,700,700i,800,800i,900,900i|Roboto+Condensed:400,400i,700,700i');
@@ -98,7 +98,7 @@ while ($song = mysqli_fetch_array($res_songs)) {
 
 
 	<script>
-		$(document).ready(function () {
+		$(document).ready(function() {
 			// Map file => cat_id
 			const albumInfo = {
 				"vietnam_songs.php": 2,
@@ -127,7 +127,7 @@ while ($song = mysqli_fetch_array($res_songs)) {
 						page_no: page,
 						cat_id: catId
 					},
-					success: function (response) {
+					success: function(response) {
 						try {
 							let data = typeof response === 'object' ? response : JSON.parse(response);
 							$("#song-list").html(data.songs);
@@ -137,7 +137,7 @@ while ($song = mysqli_fetch_array($res_songs)) {
 							$("#song-list").html("<div class='alert alert-danger'>Cannot load song list</div>");
 						}
 					},
-					error: function (xhr, status, error) {
+					error: function(xhr, status, error) {
 						console.error("AJAX Error:", error);
 						$("#song-list").html("<div class='alert alert-danger'>Server connection error</div>");
 					}
@@ -148,14 +148,14 @@ while ($song = mysqli_fetch_array($res_songs)) {
 			loadSongs(1);
 
 			// Phân trang
-			$(document).on("click", ".pagination a", function (e) {
+			$(document).on("click", ".pagination a", function(e) {
 				e.preventDefault();
 				const page = $(this).data("page");
 				loadSongs(page);
 			});
 
 			// Thêm vào danh sách yêu thích
-			$(document).on("click", ".add-to-fav", function () {
+			$(document).on("click", ".add-to-fav", function() {
 				const songId = $(this).data("songid");
 				const heartIcon = $(this).find("i.fa-heart");
 
@@ -166,7 +166,7 @@ while ($song = mysqli_fetch_array($res_songs)) {
 					data: JSON.stringify({
 						song_id: songId
 					}),
-					success: function (response) {
+					success: function(response) {
 						try {
 							let data = typeof response === 'object' ? response : JSON.parse(response);
 							if (data.status === 'success') {
@@ -190,7 +190,7 @@ while ($song = mysqli_fetch_array($res_songs)) {
 							Swal.fire('Error', 'Invalid response from server', 'error');
 						}
 					},
-					error: function (xhr, status, error) {
+					error: function(xhr, status, error) {
 						console.error("Favorite AJAX Error:", error);
 						try {
 							let response = JSON.parse(xhr.responseText);
@@ -202,7 +202,7 @@ while ($song = mysqli_fetch_array($res_songs)) {
 				});
 			});
 		});
-		</script>
+	</script>
 </head>
 
 <body>
@@ -230,7 +230,6 @@ while ($song = mysqli_fetch_array($res_songs)) {
 							<button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown"
 								aria-haspopup="true" aria-expanded="false">Track</button>
 							<div class="dropdown-menu dropdown-primary">
-								<!-- <a class="dropdown-item" href="kannada_songs.php"><b>Kannada Songs</b></a> -->
 								<a class="dropdown-item" href="vietnam_songs.php"><b>Vietnam Songs</b></a>
 								<a class="dropdown-item" href="english_songs.php"><b>English Songs</b></a>
 								<a class="dropdown-item" href="uploaded_songs.php"><b>Uploaded Songs</b></a>
@@ -252,6 +251,7 @@ while ($song = mysqli_fetch_array($res_songs)) {
 	</header>
 	<!-- //header -->
 
+	
 	<section class='details-card'>
 		<div class='container'>
 			<div class='row justify-content-center' id="song-list"></div>
@@ -260,7 +260,7 @@ while ($song = mysqli_fetch_array($res_songs)) {
 
 	<!-- Pagination -->
 	<div class="pagination text-center justify-content-center" id="pagination"></div>
-
+	<!-- //Pagination -->
 
 
 	<!-- contact top -->
@@ -273,6 +273,7 @@ while ($song = mysqli_fetch_array($res_songs)) {
 		</div>
 	</div>
 	<!-- //contact top -->
+
 	<!-- contact -->
 	<div class="w3-contact py-5" id="contact">
 		<div class="container">
@@ -283,7 +284,7 @@ while ($song = mysqli_fetch_array($res_songs)) {
 					<div class="fv3-contact">
 						<div class="row">
 							<div class="col-2">
-								<span ><box-icon name='envelope' type='solid'></box-icon></span>
+								<span><box-icon name='envelope' type='solid'></box-icon></span>
 							</div>
 							<div class="col-10">
 								<h6>email</h6>
@@ -307,7 +308,7 @@ while ($song = mysqli_fetch_array($res_songs)) {
 					<div class="fv3-contact">
 						<div class="row">
 							<div class="col-2">
-								<span><box-icon name='home' type='solid' ></box-icon></span>
+								<span><box-icon name='home' type='solid'></box-icon></span>
 							</div>
 							<div class="col-10">
 								<h6>address</h6>
@@ -358,16 +359,19 @@ while ($song = mysqli_fetch_array($res_songs)) {
 		</div>
 	</div>
 	<!-- //contact -->
+
 	<!-- copyright -->
 	<div class="cpy-right text-center">
 		<p>© 2025 My Musical World. All rights reserved</p>
 	</div>
 	<!-- //copyright -->
+
 	<!-- MDB core JavaScript -->
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.14/js/mdb.min.js"></script>
-	
+
 	<script src="js/move-top.js "></script>
 	<script src="js/easing.js "></script>
+	<!-- here stars scrolling icon -->
 	<script>
 		jQuery(document).ready(function($) {
 			$(".scroll ").click(function(event) {
@@ -383,12 +387,15 @@ while ($song = mysqli_fetch_array($res_songs)) {
 			});
 		});
 	</script>
-	
+	<!-- //here ends scrolling icon -->
+
 	<!-- Bootstrap Core JavaScript -->
 	<script src="js/bootstrap.js"></script>
 	<!-- //Bootstrap Core JavaScript -->
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sweetalert2@7.28.11/dist/sweetalert2.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+	<!-- Send us mail section -->
 	<script>
 		$(document).ready(function() {
 			$('#contactForm').on('submit', function(e) {
@@ -437,6 +444,7 @@ while ($song = mysqli_fetch_array($res_songs)) {
 			});
 		});
 	</script>
+	<!-- //Send us mail section -->
 </body>
 
 </html>

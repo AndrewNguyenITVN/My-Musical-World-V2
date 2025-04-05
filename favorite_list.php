@@ -45,7 +45,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_song_id'])) {
 
 
 // Lấy bài hát yêu thích
-// Lấy bài hát yêu thích
 $sql = "SELECT s.song_id, s.song_name, s.singer_name, s.song_image, s.audio_file
         FROM favorite_songs f
         JOIN songs s ON f.song_id = s.song_id
@@ -144,6 +143,8 @@ mysqli_stmt_close($stmt);
 			</nav>
 		</div>
 	</header>
+	<!-- //Header -->
+
 	<!-- Hiển thị danh sách bài hát yêu thích -->
 	<section class="details-card">
 		<div class="container mt-5">
@@ -153,7 +154,7 @@ mysqli_stmt_close($stmt);
 						<?php foreach ($songs as $song): ?>
 							<div class="col-md-4 mb-4">
 								<div class="card">
-									<img src="songs/img/<?= htmlspecialchars($song['song_image']) ?>" class="card-img-top" alt="<?= htmlspecialchars($song['song_name']) ?>" >
+									<img src="songs/img/<?= htmlspecialchars($song['song_image']) ?>" class="card-img-top" alt="<?= htmlspecialchars($song['song_name']) ?>">
 									<div class="card-body">
 										<h5 class="card-title" style="color: white; padding: 5px 0; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; line-height: 20px; height: 24px;">
 											<?= htmlspecialchars($song['song_name']) ?>
@@ -180,6 +181,7 @@ mysqli_stmt_close($stmt);
 			</div>
 		</div>
 	</section>
+	<!-- //Hiển thị danh sách bài hát yêu thích -->
 
 	<!-- contact top -->
 	<div class="contact-top text-center" id="more_info">
@@ -191,6 +193,7 @@ mysqli_stmt_close($stmt);
 		</div>
 	</div>
 	<!-- //contact top -->
+
 	<!-- contact -->
 	<div class="w3-contact py-5" id="contact">
 		<div class="container">
@@ -276,6 +279,7 @@ mysqli_stmt_close($stmt);
 		</div>
 	</div>
 	<!-- //contact -->
+
 	<!-- Footer -->
 	<div class="cpy-right text-center">
 		<p>© 2025 My Musical World. All rights reserved</p>
@@ -285,6 +289,7 @@ mysqli_stmt_close($stmt);
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.14/js/mdb.min.js"></script>
 	<script src="js/move-top.js"></script>
 	<script src="js/easing.js "></script>
+
 	<script>
 		jQuery(document).ready(function($) {
 			$(".scroll ").click(function(event) {
@@ -296,7 +301,7 @@ mysqli_stmt_close($stmt);
 			});
 			$('#forgot').click(function() {
 				$('#modalLRForm').modal('hide');
-				$('ForgotPasswordModal').modal('show');
+				$('#ForgotPasswordModal').modal('show');
 			});
 		});
 	</script>
@@ -305,6 +310,7 @@ mysqli_stmt_close($stmt);
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.28.11/dist/sweetalert2.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+	<!-- Xóa bài hát yêu thích -->
 	<script>
 		document.addEventListener("DOMContentLoaded", function() {
 			const deleteButtons = document.querySelectorAll(".delete-btn");
@@ -337,11 +343,18 @@ mysqli_stmt_close($stmt);
 											title: "Removed!",
 											text: data.message,
 											icon: "success",
-											showConfirmButton: false, // Ẩn nút OK
-											timer: 1000 // Tự động đóng sau 1.5 giây
-										}).then(() => {
-												location.reload();
-											});
+											showConfirmButton: false,
+											timer: 1000
+										});
+
+										// Xóa card khỏi giao diện
+										const card = button.closest(".col-md-4");
+										card.remove();
+
+										// Nếu không còn bài hát nào => reload (nếu cần)
+										if (data.reload) {
+											location.reload();
+										}
 									} else {
 										Swal.fire("Oops!", data.message, "error");
 									}
@@ -355,6 +368,7 @@ mysqli_stmt_close($stmt);
 			});
 		});
 	</script>
+	<!-- //Xóa bài hát yêu thích -->
 </body>
 
 </html>

@@ -5,11 +5,6 @@ if (!isset($_SESSION['email_address']))
 
 include('connection.php');
 
-// $username = $_SESSION['username'];
-// $sql = "SELECT * FROM user WHERE username = '$username'";
-// $result = mysqli_query($conn, $sql);
-// $row = mysqli_fetch_array($result);
-// $user_id = $row['user_id'];
 $user_id = $_SESSION['user_id'];
 
 /* ===== XỬ LÝ UPDATE SONG ===== */
@@ -21,7 +16,7 @@ if (isset($_POST['update_song'])) {
     $update_singer_name = mysqli_real_escape_string($conn, $_POST['update_singer_name']);
 
     // Kiểm tra category để update đúng bảng
-     if ($update_category == 'vietnam') {
+    if ($update_category == 'vietnam') {
         $sql = "UPDATE songs
                 SET song_name='$update_song_name',
                     singer_name='$update_singer_name'
@@ -127,7 +122,7 @@ if (isset($_POST['upload_vietnam'])) {
         $file_tmp = $_FILES['song_image']['tmp_name'];
         move_uploaded_file($file_tmp, "songs/img/" . $song_image);
     }
-     $sql = "INSERT INTO songs(`singer_id`, `cat_id`, `song_name`, `singer_name`, `song_image`, `audio_file`)
+    $sql = "INSERT INTO songs(`singer_id`, `cat_id`, `song_name`, `singer_name`, `song_image`, `audio_file`)
             VALUES($singer_id, $cat_id, '$song_name', '$singer_name', '$song_image', '$audio_file')";
     $result = mysqli_query($conn, $sql);
     if ($result) {
@@ -188,7 +183,7 @@ if (isset($_POST['upload_english'])) {
         $file_tmp = $_FILES['song_image']['tmp_name'];
         move_uploaded_file($file_tmp, "songs/img/" . $song_image);
     }
-     $sql = "INSERT INTO songs(`singer_id`, `cat_id`, `song_name`, `singer_name`, `song_image`, `audio_file`)
+    $sql = "INSERT INTO songs(`singer_id`, `cat_id`, `song_name`, `singer_name`, `song_image`, `audio_file`)
             VALUES($singer_id, $cat_id, '$song_name', '$singer_name', '$song_image', '$audio_file')";
     $result = mysqli_query($conn, $sql);
     if ($result) {
@@ -229,30 +224,30 @@ if (isset($_POST['upload_english'])) {
     <!-- SweetAlert CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@7.28.11/dist/sweetalert2.min.css">
     <style>
-    th {
-        background-color: #121212 !important;
-        z-index: 2;
-        top: 0;
-        color: #fff;
-    }
+        th {
+            background-color: #121212 !important;
+            z-index: 2;
+            top: 0;
+            color: #fff;
+        }
 
-    td {
-        background-color: #1f1f1f !important;
-        color: #fff;
-    }
+        td {
+            background-color: #1f1f1f !important;
+            color: #fff;
+        }
 
-    .table-wrapper {
-        overflow-y: auto;
-        max-height: 300px;
-    }
+        .table-wrapper {
+            overflow-y: auto;
+            max-height: 300px;
+        }
 
-    /* Khắc phục rung nhẹ do table-border */
-    .table th,
-    .table td {
-        vertical-align: middle;
-        white-space: nowrap;
-    }
-</style>
+        /* Khắc phục rung nhẹ do table-border */
+        .table th,
+        .table td {
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+    </style>
 
 </head>
 
@@ -333,7 +328,7 @@ if (isset($_POST['upload_english'])) {
 		</div><br>
 		";
     ?>
-
+    <!-- //List of all users -->
     <!-- Vietnam Songs Section -->
     <div class="alert alert-primary" role="alert">
         <center>
@@ -428,14 +423,14 @@ if (isset($_POST['upload_english'])) {
                         <tbody>
         ";
 
-        $count = 0;
-        while ($row = mysqli_fetch_array($result)) {
-            $count++;
-            $song_id     = $row['song_id'];
-            $song_name   = $row['song_name'];
-            $singer_name = $row['singer_name'];
+    $count = 0;
+    while ($row = mysqli_fetch_array($result)) {
+        $count++;
+        $song_id     = $row['song_id'];
+        $song_name   = $row['song_name'];
+        $singer_name = $row['singer_name'];
 
-            echo "
+        echo "
                 <tr>
                     <td class='pt-3-half'>" . $count . "</td>
                     <td class='pt-3-half'>" . $song_name . "</td>
@@ -456,9 +451,9 @@ if (isset($_POST['upload_english'])) {
                     </td>
                 </tr>
             ";
-        }
+    }
 
-        echo "
+    echo "
                         </tbody>
                     </table>
                 </div>
@@ -466,6 +461,7 @@ if (isset($_POST['upload_english'])) {
         </div><br>
         ";
     ?>
+    <!-- //Vietnam Songs Section -->
 
     <!-- English Songs Section -->
     <div class="alert alert-primary" role="alert">
@@ -565,7 +561,7 @@ if (isset($_POST['upload_english'])) {
         $song_id     = $row['song_id'];
         $song_name   = $row['song_name'];
         $singer_name = $row['singer_name'];
-    echo "
+        echo "
                 <tr>
                     <td class='pt-3-half'>" . $count . "</td>
                     <td class='pt-3-half'>" . $song_name . "</td>
@@ -586,9 +582,9 @@ if (isset($_POST['upload_english'])) {
                     </td>
                 </tr>
             ";
-        }
+    }
 
-        echo "
+    echo "
                         </tbody>
                     </table>
                 </div>
@@ -596,10 +592,11 @@ if (isset($_POST['upload_english'])) {
         </div><br>
         ";
     ?>
+    <!-- //English Songs Section -->
 
     <!-- Uploaded Songs Section -->
     <br>
-    
+
     <div class="alert alert-primary" role="alert">
         <center>
             <h4 class="text-center  text-blue p-2 rounded">Uploaded Songs</h4>
@@ -655,9 +652,9 @@ if (isset($_POST['upload_english'])) {
                     </td>
                 </tr>
             ";
-        }
+    }
 
-        echo "
+    echo "
                         </tbody>
                     </table>
                 </div>
@@ -665,6 +662,7 @@ if (isset($_POST['upload_english'])) {
         </div><br>
         ";
     ?>
+    <!-- //Uploaded Songs Section -->
 
     <!-- Modal Update Song -->
     <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel" aria-hidden="true">
@@ -717,32 +715,32 @@ if (isset($_POST['upload_english'])) {
 
     <!-- Custom JS: Xác nhận xóa và mở modal update -->
     <script>
-		function confirmDelete(formId, songName) {
-			Swal.fire({
-				title: "Are you sure?",
-				text: "Are you sure you want to delete the song: " + songName + "?",
-				icon: "warning",
-				showCancelButton: true,
-				confirmButtonText: "Yes, delete it!",
-				cancelButtonText: "Cancel"
-			}).then((result) => {
-				if (result.isConfirmed) {
-					
-					Swal.fire({
-						title: "Deleted!",
-						text: "The song '" + songName + "' has been deleted.",
-						icon: "success",
-						timer: 1500,
-						showConfirmButton: false
-					});
+        function confirmDelete(formId, songName) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Are you sure you want to delete the song: " + songName + "?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "Cancel"
+            }).then((result) => {
+                if (result.isConfirmed) {
 
-					
-					setTimeout(() => {
-						document.getElementById(formId).submit();
-					}, 1600); 
-				}
-			});
-		}
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "The song '" + songName + "' has been deleted.",
+                        icon: "success",
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
+
+
+                    setTimeout(() => {
+                        document.getElementById(formId).submit();
+                    }, 1600);
+                }
+            });
+        }
 
         function openUpdateModal(song_id, song_name, singer_name, category) {
             document.getElementById("update_song_id").value = song_id;
@@ -752,6 +750,7 @@ if (isset($_POST['upload_english'])) {
             $('#updateModal').modal('show');
         }
     </script>
+    <!-- //Custom JS: Xác nhận xóa và mở modal update -->
 </body>
 
 </html>

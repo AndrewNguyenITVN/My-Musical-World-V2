@@ -7,7 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $phone = $_POST['phone'];
     $message = $_POST['message'];
-    
+
     $mail = new PHPMailer;
 
     $mail->isSMTP();                                      // Set mailer to use SMTP
@@ -32,11 +32,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <p>$message</p>
     ";
 
-    if(!$mail->send()) {
+    if (!$mail->send()) {
         echo json_encode(['status' => 'error', 'message' => 'Email could not be sent: ' . $mail->ErrorInfo]);
     } else {
         echo json_encode(['status' => 'success', 'message' => 'Email sent successfully!']);
     }
     exit;
 }
-?> 

@@ -108,7 +108,7 @@ mysqli_data_seek($res_songs, 0);
 	<script src="js/jquery-2.2.3.min.js"></script>
 	<!-- js-->
 	<script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
-	
+
 	<link rel="stylesheet" href="css/card.css">
 
 	<style>
@@ -251,7 +251,6 @@ mysqli_data_seek($res_songs, 0);
 							<button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown"
 								aria-haspopup="true" aria-expanded="false">Track</button>
 							<div class="dropdown-menu dropdown-primary">
-								<!-- <a class="dropdown-item" href="kannada_songs.php"><b>Kannada Songs</b></a> -->
 								<a class="dropdown-item" href="vietnam_songs.php"><b>Vietnam Songs</b></a>
 								<a class="dropdown-item" href="english_songs.php"><b>English Songs</b></a>
 								<a class="dropdown-item" href="uploaded_songs.php"><b>Uploaded Songs</b></a>
@@ -279,10 +278,11 @@ mysqli_data_seek($res_songs, 0);
 			<div class='row justify-content-center' id="song-list"></div>
 		</div>
 	</section>
+	<!-- //Danh sách bài hát -->
 
 	<!-- Pagination -->
 	<div class="pagination text-center justify-content-center" id="pagination"></div>
-
+	<!-- //Pagination -->
 
 
 	<!-- contact top -->
@@ -413,6 +413,7 @@ mysqli_data_seek($res_songs, 0);
 	<script src="js/bootstrap.js"></script>
 	<!-- //Bootstrap Core JavaScript -->
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<!-- send us a mail section -->
 	<script>
 		$(document).ready(function() {
 			$('#contactForm').on('submit', function(e) {
@@ -461,6 +462,7 @@ mysqli_data_seek($res_songs, 0);
 			});
 		});
 	</script>
+	<!-- //send us a mail section -->
 </body>
 
 </html>
