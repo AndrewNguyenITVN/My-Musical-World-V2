@@ -1,4 +1,4 @@
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@7"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <?php
 // Kiểm tra và khởi tạo session
 if (extension_loaded('session')) {
@@ -22,20 +22,34 @@ if (isset($_POST['register'])) {
     $confirm_password = mysqli_real_escape_string($conn, trim($_POST['confirm_password']));
 
     // Kiểm tra mật khẩu trống
-    if (empty($password) || empty($confirm_password)) {
-        echo '<script type="text/javascript">
-            document.addEventListener("DOMContentLoaded", function() {
-                sweetAlert("Oops...", "Please enter your password!", "error");
-            });
-        </script>';
-        return;
-    }
+    // if (empty($password) || empty($confirm_password)) {
+    //     echo '<script type="text/javascript">
+    //         document.addEventListener("DOMContentLoaded", function() {
+    //             Swal.fire({
+    //                 title: "Oops...",
+    //                 text: "Please enter your password!,
+    //                 icon: "error",
+    //                 confirmButtonText: "OK"
+    //             }).then(() => {
+    //                 window.history.back(); // Quay lại trang trước
+    //             });
+    //         });
+    //     </script>';
+    //     return;
+    // }
 
     // Kiểm tra độ dài mật khẩu
     if (strlen($password) < 6) {
         echo '<script type="text/javascript">
             document.addEventListener("DOMContentLoaded", function() {
-                sweetAlert("Oops...", "Password must be at least 6 characters!", "error");
+                Swal.fire({
+                    title: "Oops...",
+                    text: "Password must be at least 6 characters!",
+                    icon: "error",
+                    confirmButtonText: "OK"
+                }).then(() => {
+                    window.history.back(); // Quay lại trang trước
+                });
             });
         </script>';
         return;
@@ -45,7 +59,14 @@ if (isset($_POST['register'])) {
     if ($password !== $confirm_password) {
         echo '<script type="text/javascript">
             document.addEventListener("DOMContentLoaded", function() {
-                sweetAlert("Oops...", "Passwords do not match!", "error");
+                Swal.fire({
+                    title: "Oops...",
+                    text: "Passwords do not match!",
+                    icon: "error",
+                    confirmButtonText: "OK"
+                }).then(() => {
+                    window.history.back(); // Quay lại trang trước
+                });
             });
         </script>';
         return;
@@ -74,7 +95,7 @@ if (isset($_POST['register'])) {
                                 icon: "error",
                                 confirmButtonText: "OK"
                             }).then(() => {
-                                window.location.href = "index.php"; // Chuyển hướng sau khi nhấn OK
+                                window.history.back();
                             });
                           }, 500);';
                 echo '</script>';
@@ -88,7 +109,7 @@ if (isset($_POST['register'])) {
                                 icon: "error",
                                 confirmButtonText: "OK"
                             }).then(() => {
-                                window.location.href = "index.php"; // Chuyển hướng sau khi nhấn OK
+                                window.history.back();
                             });
                           }, 500);';
                 echo '</script>';
@@ -120,21 +141,39 @@ if (isset($_POST['register'])) {
         } else {
             // Hiển thị lỗi nếu số điện thoại không hợp lệ
             echo '<script type="text/javascript">';
-            echo 'setTimeout(function () { sweetAlert("Oops...","Mobile number ' . $mobile_number . ' is invalid!","error");';
-            echo '}, 500);</script>';
+            echo 'setTimeout(function () { 
+                        Swal.fire({
+                            title: "Oops...",
+                            text: "Mobile number ' . $mobile_number . ' is invalid!",
+                            icon: "error",
+                            confirmButtonText: "OK"
+                        }).then(() => {
+                            window.history.back();
+                        });
+                        }, 500);';
+            echo '</script>';
         }
     } else {
         // Hiển thị lỗi nếu email không hợp lệ
         echo '<script type="text/javascript">';
-        echo 'setTimeout(function () { sweetAlert("Oops...","Email address ' . $email_address . ' is invalid!","error");';
-        echo '}, 500);</script>';
+        echo 'setTimeout(function () { 
+                        Swal.fire({
+                            title: "Oops...",
+                            text: "Email address ' . $email_address . ' is invalid!",
+                            icon: "error",
+                            confirmButtonText: "OK"
+                        }).then(() => {
+                            window.history.back();
+                        });
+                        }, 500);';
+        echo '</script>';
     }
 }
 
 // Xử lý đăng nhập
 if (isset($_POST['login'])) {
 
-    session_start(); // Bắt đầu session
+    //session_start(); // Bắt đầu session
 
     include('connection.php'); // Kết nối database
 
@@ -150,39 +189,47 @@ if (isset($_POST['login'])) {
     if (!$result) {
         // Hiển thị lỗi nếu có vấn đề khi đăng nhập
         echo '<script type="text/javascript">';
-        echo 'setTimeout(function () { sweetAlert("Warning...","Error while loggin in!..","warning");';
+        echo 'setTimeout(function () { Swal.fire("Warning...","Error while loggin in!..","warning");';
         echo '}, 500);</script>';
-    } else {
-        $row = mysqli_fetch_array($result);
+    } else {   
         $count = mysqli_num_rows($result);
-        $username = $row['username'];
-        $user_id = $row['user_id'];
-
         if ($count == 1) {
-            if ($row['confirm_status'] == 0) {
-                // Hiển thị thông báo nếu tài khoản chưa kích hoạt
-                echo '<script type="text/javascript">';
-                echo 'setTimeout(function () { sweetAlert("Warning...","Please activate your account first!..","warning");';
-                echo '}, 500);</script>';
+            $row = mysqli_fetch_array($result);
+            $username = $row['username'];
+            $user_id = $row['user_id'];
+            if (isset($row['confirm_status']) && $row['confirm_status'] == 0) {
+                echo '<script>setTimeout(function () {
+                    Swal.fire("Warning...", "Please activate your account first!", "warning");
+                }, 500);</script>';
             } else {
-                // Lưu thông tin người dùng vào session
                 $_SESSION['username'] = $username;
                 $_SESSION['email_address'] = $email_address;
                 $_SESSION['user_id'] = $user_id;
 
-                // Kiểm tra nếu là admin thì chuyển hướng đến trang admin
-                if ($email_address == 'admin@gmail.com' && $row['password'] == '21232f297a57a5a743894a0e4a801fc3') {
+                // 👉 Dựa vào user_id để phân quyền
+                if ($user_id < 100) {
                     header('location:admin_page.php');
                 } else {
-                    // Người dùng thường chuyển đến trang profile
                     header('location:profile.php');
                 }
+                exit();
             }
         } else {
             // Hiển thị lỗi nếu thông tin đăng nhập không đúng
             echo '<script type="text/javascript">';
-            echo 'setTimeout(function () { sweetAlert("Oops...","Wrong username or Password!...","error");';
-            echo '}, 500);</script>';
+            //echo 'setTimeout(function () { Swal.fire("Oops...","Wrong username or Password!...","error");';
+            //echo '}, 500);</script>';
+            echo 'setTimeout(function () { 
+                        Swal.fire({
+                            title: "Oops...",
+                            text: "Wrong username or Password!...",
+                            icon: "error",
+                            confirmButtonText: "OK"
+                        }).then(() => {
+                            window.history.back();
+                        });
+                        }, 500);';
+            echo '</script>';
         }
     }
 }
@@ -201,14 +248,14 @@ if (isset($_POST['forgot'])) {
 ?>
         <script>
             document.addEventListener('DOMContentLoaded', function() {
-                sweetAlert({
+                Swal.fire({
                     title: 'Email Not Found',
                     text: 'Email address <?php echo $email_address; ?> does not exist!',
-                    type: 'error',
+                    icon: 'error',
                     showCancelButton: false,
                     confirmButtonColor: '#d33',
                     confirmButtonText: 'OK',
-                    closeOnConfirm: true
+                    showConfirmButton: true
                 }, function() {
                     document.getElementById('ForgotPasswordModal').style.display = 'none';
                     $('.modal-backdrop').remove();
@@ -270,14 +317,14 @@ if (isset($_POST['forgot'])) {
         ?>
             <script>
                 document.addEventListener('DOMContentLoaded', function() {
-                    sweetAlert({
+                    Swal.fire({
                         title: 'Email Sending Failed',
                         text: 'Error while sending email. Please check your internet connection!',
-                        type: 'error',
+                        icon: 'error',
                         showCancelButton: false,
                         confirmButtonColor: '#d33',
                         confirmButtonText: 'OK',
-                        closeOnConfirm: true
+                        showConfirmButton: true
                     }, function() {
                         document.getElementById('ForgotPasswordModal').style.display = 'none';
                         $('.modal-backdrop').remove();
@@ -297,7 +344,7 @@ if (isset($_POST['forgot'])) {
                         showCancelButton: false,
                         confirmButtonColor: '#28a745',
                         confirmButtonText: 'OK',
-                        closeOnConfirm: true
+                        showConfirmButton: true
                     }, function() {
                         document.getElementById('ForgotPasswordModal').style.display = 'none';
                         $('.modal-backdrop').remove();
@@ -328,7 +375,7 @@ if (isset($_GET['token']) && isset($_GET['email'])) {
     }
 
     // Lưu email và token vào session nếu hợp lệ
-    session_start();
+    // session_start();
     $_SESSION['email_address'] = $email;
     $_SESSION['reset_token'] = $token;
 }
@@ -358,14 +405,14 @@ if (isset($_POST['reset'])) {
             // Hiển thị thông báo thành công
             echo '<script type="text/javascript">';
             echo 'setTimeout(function () { 
-                sweetAlert("Success","Password updated successfully. Please login with your new password.","success");
+                Swal.fire("Success","Password updated successfully. Please login with your new password.","success");
                 window.location.href = "index.php";
             }, 1000);</script>';
         }
     } else {
         // Hiển thị lỗi nếu mật khẩu không khớp
         echo '<script type="text/javascript">';
-        echo 'setTimeout(function () { sweetAlert("Oops...","The two passwords do not match!","error"); }, 500);</script>';
+        echo 'setTimeout(function () { Swal.fire("Oops...","The two passwords do not match!","error"); }, 500);</script>';
     }
 }
 ?>

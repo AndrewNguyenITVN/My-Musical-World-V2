@@ -1,13 +1,17 @@
+-- Tạo database
+--CREATE DATABASE music_db;
+--USE music_db;
+
 -- Bảng người dùng
 CREATE TABLE `user` (
-    `user_id` INT(10) NOT NULL AUTO_INCREMENT,
+    `user_id` INT NOT NULL AUTO_INCREMENT,
     `username` VARCHAR(255) NOT NULL,
     `mobile_number` VARCHAR(10) NOT NULL,
     `email_address` VARCHAR(255) NOT NULL UNIQUE,
     `password` VARCHAR(255) NOT NULL,
     `activation_code` VARCHAR(255) NOT NULL DEFAULT '0',
     `confirm_status` INT(1) DEFAULT '0',
-    `contributions` INT(10) NOT NULL DEFAULT '0',
+    `contributions` INT NOT NULL DEFAULT '0',
     `reset_token` VARCHAR(255) DEFAULT NULL,
     `reset_token_expiry` DATETIME DEFAULT NULL,
     `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -15,21 +19,21 @@ CREATE TABLE `user` (
     PRIMARY KEY (`user_id`)
 );
 
--- Đặt AUTO_INCREMENT bắt đầu từ 100:
+-- Đặt AUTO_INCREMENT bắt đầu từ 100
 ALTER TABLE `user` AUTO_INCREMENT = 100;
 
 -- Bảng thể loại
 CREATE TABLE `category` (
-    `cat_id` INT(10) NOT NULL AUTO_INCREMENT,
+    `cat_id` INT NOT NULL AUTO_INCREMENT,
     `cat_name` VARCHAR(255) NOT NULL,
     PRIMARY KEY (`cat_id`)
 );
 
 -- Bảng bài hát duy nhất
 CREATE TABLE `songs` (
-    `song_id` INT(10) NOT NULL AUTO_INCREMENT,
-    `singer_id` INT(10), -- NULL nếu không upload bởi user nào
-    `cat_id` INT(10) NOT NULL,
+    `song_id` INT NOT NULL AUTO_INCREMENT,
+    `singer_id` INT,
+    `cat_id` INT NOT NULL,
     `song_name` VARCHAR(255) NOT NULL,
     `singer_name` VARCHAR(100) NOT NULL,
     `song_image` VARCHAR(255) NOT NULL,
@@ -44,6 +48,7 @@ CREATE TABLE `favorite_songs` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `user_id` INT NOT NULL,
     `song_id` INT NOT NULL,
+    UNIQUE (`user_id`, `song_id`),
     FOREIGN KEY (`user_id`) REFERENCES `user`(`user_id`) ON DELETE CASCADE,
     FOREIGN KEY (`song_id`) REFERENCES `songs`(`song_id`) ON DELETE CASCADE
 );

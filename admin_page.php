@@ -477,7 +477,7 @@ if (isset($_POST['upload_english'])) {
                     <div class="form-group">
                         <label class="font-weight-bold color-white">Upload Audio File</label>
                         <div class="input-group">
-                            <input type="file" class="form-control bg-primary text-white" name="audio_file" required>
+                            <input type="file" class="form-control text-white" name="audio_file" required>
                             <div class="input-group-append">
                                 <span class="input-group-text"><i class="fa fa-music"></i></span>
                             </div>
@@ -505,7 +505,7 @@ if (isset($_POST['upload_english'])) {
                     <div class="form-group">
                         <label class="font-weight-bold color-white">Upload Cover Image</label>
                         <div class="input-group">
-                            <input type="file" class="form-control bg-primary text-white" name="song_image" required>
+                            <input type="file" class="form-control text-white" name="song_image" required>
                             <div class="input-group-append">
                                 <span class="input-group-text"><i class="fa fa-image"></i></span>
                             </div>

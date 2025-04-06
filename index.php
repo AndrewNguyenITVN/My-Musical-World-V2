@@ -127,7 +127,7 @@
 	mysqli_stmt_close($stmt);
 	?>
 	<!-- Danh sách nhạc -->
-	<<div class="alert alert-primary" role="alert">
+	<div class="alert alert-primary" role="alert">
 		<center>
 			<h4 class="text-center  text-blue p-2 rounded">My Music List</h4>
 		</center>

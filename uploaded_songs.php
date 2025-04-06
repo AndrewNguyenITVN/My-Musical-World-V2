@@ -101,7 +101,7 @@ if (isset($_POST['delete_song_id'])) {
 	if ($result) {
 		$_SESSION['message'] = '<script type="text/javascript">
                 setTimeout(function () { 
-                  sweetAlert("Deleted"," <b>Deleted song successfully ' . $song_name . '</b>","success");
+                  Swal.fire("Deleted"," <b>Deleted song successfully ' . $song_name . '</b>","success");
                 }, 500);
               </script>';
 		header("Location: uploaded_songs.php");
@@ -109,7 +109,7 @@ if (isset($_POST['delete_song_id'])) {
 	} else {
 		$_SESSION['message'] = '<script type="text/javascript">
                 setTimeout(function () { 
-                  sweetAlert("Error","Error while deleting. Please check your internet connection!","error");
+                  Swal.fire("Error","Error while deleting. Please check your internet connection!","error");
                 }, 500);
               </script>';
 		header("Location: uploaded_songs.php");

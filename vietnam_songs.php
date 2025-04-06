@@ -116,114 +116,6 @@ mysqli_data_seek($res_songs, 0);
 		/* End card section */
 	</style>
 
-
-	<script>
-		$(document).ready(function() {
-			// Map file => cat_id
-			const albumInfo = {
-				"vietnam_songs.php": 2,
-				"english_songs.php": 3,
-				"uploaded_songs.php": 4
-			};
-
-			// Xác định category ID dựa vào URL
-			let currentPage = window.location.href;
-			let catId = 2; // default
-
-			for (let page in albumInfo) {
-				if (currentPage.includes(page)) {
-					catId = albumInfo[page];
-					break;
-				}
-			}
-
-
-			// Hàm load bài hát từ server
-			function loadSongs(page) {
-				$.ajax({
-					url: "fetch_songs.php",
-					type: "POST",
-					data: {
-						page_no: page,
-						cat_id: catId
-					},
-					success: function(response) {
-						try {
-							let data = typeof response === 'object' ? response : JSON.parse(response);
-							$("#song-list").html(data.songs);
-							$("#pagination").html(data.pagination);
-						} catch (e) {
-							console.error("JSON parse error:", e);
-							$("#song-list").html("<div class='alert alert-danger'>Cannot load song list</div>");
-						}
-					},
-					error: function(xhr, status, error) {
-						console.error("AJAX Error:", error);
-						$("#song-list").html("<div class='alert alert-danger'>Server connection error</div>");
-					}
-				});
-			}
-
-			// Tải trang đầu tiên
-			loadSongs(1);
-
-			// Phân trang
-			$(document).on("click", ".pagination a", function(e) {
-				e.preventDefault();
-				const page = $(this).data("page");
-				loadSongs(page);
-			});
-
-			// Thêm vào danh sách yêu thích
-			$(document).on("click", ".add-to-fav", function() {
-				const songId = $(this).data("songid");
-				const heartIcon = $(this).find("i.fa-heart");
-
-				$.ajax({
-					url: "add_favorite.php",
-					type: "POST",
-					contentType: "application/json",
-					data: JSON.stringify({
-						song_id: songId
-					}),
-					success: function(response) {
-						try {
-							let data = typeof response === 'object' ? response : JSON.parse(response);
-							if (data.status === 'success') {
-								heartIcon.addClass('text-danger');
-								Swal.fire({
-									title: 'Success',
-									text: data.message,
-									icon: 'success',
-									showConfirmButton: false,
-									timer: 1000
-								});
-
-							} else {
-								Swal.fire(
-									data.status === 'warning' ? 'Warning' : 'Error',
-									data.message,
-									data.status
-								);
-							}
-						} catch (e) {
-							console.error("JSON parse error:", e);
-							Swal.fire('Error', 'Invalid response from server', 'error');
-						}
-					},
-					error: function(xhr, status, error) {
-						console.error("Favorite AJAX Error:", error);
-						try {
-							let response = JSON.parse(xhr.responseText);
-							Swal.fire('Error', response.message, 'error');
-						} catch (e) {
-							Swal.fire('Error', 'Failed to connect to server', 'error');
-						}
-					}
-				});
-			});
-		});
-	</script>
 </head>
 
 <body>
@@ -463,6 +355,114 @@ mysqli_data_seek($res_songs, 0);
 		});
 	</script>
 	<!-- //send us a mail section -->
+
+	<script>
+		$(document).ready(function() {
+			// Map file => cat_id
+			const albumInfo = {
+				"vietnam_songs.php": 2,
+				"english_songs.php": 3,
+				"uploaded_songs.php": 4
+			};
+
+			// Xác định category ID dựa vào URL
+			let currentPage = window.location.href;
+			let catId = 2; // default
+
+			for (let page in albumInfo) {
+				if (currentPage.includes(page)) {
+					catId = albumInfo[page];
+					break;
+				}
+			}
+
+
+			// Hàm load bài hát từ server
+			function loadSongs(page) {
+				$.ajax({
+					url: "fetch_songs.php",
+					type: "POST",
+					data: {
+						page_no: page,
+						cat_id: catId
+					},
+					success: function(response) {
+						try {
+							let data = typeof response === 'object' ? response : JSON.parse(response);
+							$("#song-list").html(data.songs);
+							$("#pagination").html(data.pagination);
+						} catch (e) {
+							console.error("JSON parse error:", e);
+							$("#song-list").html("<div class='alert alert-danger'>Cannot load song list</div>");
+						}
+					},
+					error: function(xhr, status, error) {
+						console.error("AJAX Error:", error);
+						$("#song-list").html("<div class='alert alert-danger'>Server connection error</div>");
+					}
+				});
+			}
+
+			// Tải trang đầu tiên
+			loadSongs(1);
+
+			// Phân trang
+			$(document).on("click", ".pagination a", function(e) {
+				e.preventDefault();
+				const page = $(this).data("page");
+				loadSongs(page);
+			});
+
+			// Thêm vào danh sách yêu thích
+			$(document).on("click", ".add-to-fav", function() {
+				const songId = $(this).data("songid");
+				const heartIcon = $(this).find("i.fa-heart");
+
+				$.ajax({
+					url: "add_favorite.php",
+					type: "POST",
+					contentType: "application/json",
+					data: JSON.stringify({
+						song_id: songId
+					}),
+					success: function(response) {
+						try {
+							let data = typeof response === 'object' ? response : JSON.parse(response);
+							if (data.status === 'success') {
+								heartIcon.addClass('text-danger');
+								Swal.fire({
+									title: 'Success',
+									text: data.message,
+									icon: 'success',
+									showConfirmButton: false,
+									timer: 1000
+								});
+
+							} else {
+								Swal.fire(
+									data.status === 'warning' ? 'Warning' : 'Error',
+									data.message,
+									data.status
+								);
+							}
+						} catch (e) {
+							console.error("JSON parse error:", e);
+							Swal.fire('Error', 'Invalid response from server', 'error');
+						}
+					},
+					error: function(xhr, status, error) {
+						console.error("Favorite AJAX Error:", error);
+						try {
+							let response = JSON.parse(xhr.responseText);
+							Swal.fire('Error', response.message, 'error');
+						} catch (e) {
+							Swal.fire('Error', 'Failed to connect to server', 'error');
+						}
+					}
+				});
+			});
+		});
+	</script>
 </body>
 
 </html>
