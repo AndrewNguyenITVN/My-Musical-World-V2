@@ -4434,7 +4434,7 @@ tbody.collapse.show {
   color: #fff;
 }
 
-.card {
+.card .card-song{
   position: relative;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -4451,13 +4451,13 @@ tbody.collapse.show {
   border-radius: 0.25rem;
 }
 
-.card:hover {
+.card-song:hover {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   transform: scale(1.1);
   transition: transform 0.5s;
 }
 
-.card:not(hover) {
+.card-song:not(hover) {
   transform: scale(1.0);
   transition: transform 0.5s;
 }

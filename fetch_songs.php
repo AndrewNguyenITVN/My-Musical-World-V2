@@ -57,7 +57,7 @@ while ($row = mysqli_fetch_assoc($res_songs)) {
     // Gắn HTML bài hát vào biến $songs
     $songs .= "
         <div class='col-md-4 mb-4'>
-            <div class='card'>
+            <div class='card-song'>
                 <img class='card-img-top' src='$image_path' alt=''>
                 <div class='card-body'>
                     <h5 class='card-title' style='color: white; padding: 5px 0; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; line-height: 20px; height: 24px;'>$song_name</h5>
