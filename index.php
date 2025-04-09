@@ -104,7 +104,7 @@
 
 
 						</p>
-						<p class="card-text align-self-center mb-5 text-white">Explore the world of music in your own way – share, enjoy, and shine!.</p>
+						<p class="card-text align-self-center mb-5 text-white">Explore the world of music in your own way – share, enjoy, and shine!</p>
 						<a href="#more_info" class="btn btn-agile abt_card_btn scroll">Know More</a>
 					</div>
 				</div>
@@ -115,16 +115,8 @@
 
 	<?php
 	include('connection.php');
-	// Lấy bài hát yêu thích
-	$sql = "SELECT *
-			FROM songs
-			ORDER BY song_id ASC";
-	$stmt = mysqli_prepare($conn, $sql);
-	//mysqli_stmt_bind_param($stmt, "i", $user_id);
-	mysqli_stmt_execute($stmt);
-	$result = mysqli_stmt_get_result($stmt);
+	$result = mysqli_query($conn, "SELECT * FROM songs ORDER BY RAND() LIMIT 12"); //get random 12 songs for index
 	$songs = mysqli_fetch_all($result, MYSQLI_ASSOC);
-	mysqli_stmt_close($stmt);
 	?>
 	<!-- Danh sách nhạc -->
 	<div class="alert alert-primary" role="alert">
@@ -138,12 +130,12 @@
 					<?php foreach ($songs as $song): ?>
 						<div class="col-md-4 mb-4">
 							<div class="card-song">
-								<img src="songs/img/<?= htmlspecialchars($song['song_image']) ?>" class="card-img-top" alt="<?= htmlspecialchars($song['song_name']) ?>">
+								<img src="songs/img/<?= $song['song_image'] ?>" class="card-img-top" alt="<?= $song['song_name'] ?>">
 								<div class="card-body">
-									<h5 class="card-title" style="color: white; padding: 5px 0; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; line-height: 20px; height: 24px;"><?= htmlspecialchars($song['song_name']) ?></h5>
-									<p class="card-text">By <?= htmlspecialchars($song['singer_name']) ?></p>
+									<h5 class="card-title" style="color: white; padding: 5px 0; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; line-height: 20px; height: 24px;"><?= $song['song_name'] ?></h5>
+									<p class="card-text">By <?= $song['singer_name'] ?></p>
 									<audio controls style="width: 100%;">
-										<source src="songs/<?= htmlspecialchars($song['audio_file']) ?>" type="audio/mp3">
+										<source src="songs/<?= $song['audio_file'] ?>" type="audio/mp3">
 										Your browser does not support the audio element.
 									</audio>
 								</div>

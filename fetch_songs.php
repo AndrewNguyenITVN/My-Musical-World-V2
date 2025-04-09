@@ -91,8 +91,6 @@ $pagination = "<nav aria-label='Page navigation'><ul class='pagination justify-c
 if ($page > 1) {
     $prev_page = $page - 1;
     $pagination .= "<li class='page-item'><a class='page-link' href='#' data-page='{$prev_page}'>Previous</a></li>";
-} else {
-    $pagination .= "<li class='page-item disabled'><span class='page-link'>Previous</span></li>";
 }
 
 // Các số trang
@@ -108,8 +106,6 @@ for ($i = 1; $i <= $total_pages; $i++) {
 if ($page < $total_pages) {
     $next_page = $page + 1;
     $pagination .= "<li class='page-item'><a class='page-link' href='#' data-page='{$next_page}'>Next</a></li>";
-} else {
-    $pagination .= "<li class='page-item disabled'><span class='page-link'>Next</span></li>";
 }
 
 $pagination .= "</ul></nav>";

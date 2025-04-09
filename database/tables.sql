@@ -162,32 +162,14 @@ INSERT INTO `songs` (`singer_id`, `cat_id`, `song_name`, `singer_name`, `song_im
 (1, 3, 'Radioactive (Lyric Video)', 'Imagine Dragons', 'Imagine Dragons - Radioactive (Lyric Video).jpg', 'Imagine Dragons - Radioactive (Lyric Video).mp3'),
 (1, 3, 'Sharks (Official Lyric Video)', 'Imagine Dragons', 'Imagine Dragons - Sharks (Official Lyric Video).jpg', 'Imagine Dragons - Sharks (Official Lyric Video).mp3'),
 (1, 3, 'Take Me To The Beach (feat. Ado) (Official Lyric Video)', 'Imagine Dragons', 'Imagine Dragons - Take Me To The Beach (feat. Ado) (Official Lyric Video).jpg', 'Imagine Dragons - Take Me To The Beach (feat. Ado) (Official Lyric Video).mp3'),
-(1, 3, 'Thunder', 'Imagine Dragons', 'Imagine Dragons - Thunder.jpg', 'Imagine Dragons - Thunder.mp3'),
-(1, 3, 'Whatever It Takes (Official Music Video)', 'Imagine Dragons', 'Imagine Dragons - Whatever It Takes (Official Music Video).jpg', 'Imagine Dragons - Whatever It Takes (Official Music Video).mp3'),
-(1, 3, 'Wrecked (Official Music Video)', 'Imagine Dragons', 'Imagine Dragons - Wrecked (Official Music Video).jpg', 'Imagine Dragons - Wrecked (Official Music Video).mp3'),
-(1, 3, 'Wellerman (Sea Shanty)', 'Nathan Evans', 'Nathan Evans  Wellerman Sea Shanty.jpg', 'Nathan Evans  Wellerman Sea Shanty.mp3'),
-(1, 3, 'Stressed Out', 'twenty one pilots', 'twenty one pilots - Stressed Out.jpg', 'twenty one pilots - Stressed Out.mp3'),
-(1, 3, 'Let me down slowly', 'Alec Benjamin', '_Alec Benjamin - Let Me Down Slowly (feat Alessia Cara) [Lyrics-Vietsub].jpg', '_Alec Benjamin - Let Me Down Slowly (feat Alessia Cara) [Lyrics-Vietsub].mp3'),
-(1, 3, 'Want you all the time', 'Bryant Barnes', 'Bryant Barnes - Want You All The Time (Lyrics).jpg', 'Bryant Barnes - Want You All The Time (Lyrics).mp3'),
-(1, 3, 'Head In The Clouds (Official Video)', 'Hayd', 'Hayd - Head In The Clouds (Official Video).png', 'Hayd - Head In The Clouds (Official Video).mp3');
+(1, 3, 'Thunder', 'Imagine Dragons', 'Imagine Dragons - Thunder.jpg', 'Imagine Dragons - Thunder.mp3');
 
--- 🎵 Các bài hát do người dùng upload (cat_id = 4)
+-- Các bài hát do người dùng upload 
 INSERT INTO `songs` (`singer_id`, `cat_id`, `song_name`, `singer_name`, `song_image`, `audio_file`) VALUES
-(100, 3, 'Teeth (Lyric Video)', '5 Seconds of Summer', '5 Seconds of Summer - Teeth (Lyric Video).jpg', '5 Seconds of Summer - Teeth (Lyric Video).mp3'),
-(100, 3, 'Lily ft. K-391 & Emelie Hollow (Official Lyric Video)', 'Alan Walker', 'Alan Walker - Lily ft. K-391 & Emelie Hollow (Official Lyric Video).jpg', 'Alan Walker - Lily ft. K-391 & Emelie Hollow (Official Lyric Video).mp3'),
-(100, 3, 'The Nights (Lyrics)', 'Avicii', 'Avicii - The Nights (Lyrics).jpg', 'Avicii - The Nights (Lyrics).mp3'),
-(100, 3, 'Bad Liar (Lyric Video)', 'Imagine Dragons', 'Imagine Dragons - Bad Liar (Lyric Video).jpg', 'Imagine Dragons - Bad Liar (Lyric Video).mp3'),
-(100, 3, 'Believer (Official Music Video)', 'Imagine Dragons', 'Imagine Dragons - Believer (Official Music Video).jpg', 'Imagine Dragons - Believer (Official Music Video).mp3'),
-(100, 3, 'Natural (Lyrics)', 'Imagine Dragons', 'Imagine Dragons - Natural (Lyrics).jpg', 'Imagine Dragons - Natural (Lyrics).mp3'),
-(100, 3, 'One Day (Official Lyric Video)', 'Imagine Dragons', 'Imagine Dragons - One Day (Official Lyric Video).jpg', 'Imagine Dragons - One Day (Official Lyric Video).mp3'),
-(100, 3, 'Radioactive (Lyric Video)', 'Imagine Dragons', 'Imagine Dragons - Radioactive (Lyric Video).jpg', 'Imagine Dragons - Radioactive (Lyric Video).mp3'),
-(101, 2, 'Sharks (Official Lyric Video)', 'Imagine Dragons', 'Imagine Dragons - Sharks (Official Lyric Video).jpg', 'Imagine Dragons - Sharks (Official Lyric Video).mp3'),
-(101, 2, 'Take Me To The Beach (feat. Ado) (Official Lyric Video)', 'Imagine Dragons', 'Imagine Dragons - Take Me To The Beach (feat. Ado) (Official Lyric Video).jpg', 'Imagine Dragons - Take Me To The Beach (feat. Ado) (Official Lyric Video).mp3'),
-(101, 2, 'Thunder', 'Imagine Dragons', 'Imagine Dragons - Thunder.jpg', 'Imagine Dragons - Thunder.mp3'),
-(101, 2, 'Whatever It Takes (Official Music Video)', 'Imagine Dragons', 'Imagine Dragons - Whatever It Takes (Official Music Video).jpg', 'Imagine Dragons - Whatever It Takes (Official Music Video).mp3'),
-(101, 2, 'Wrecked (Official Music Video)', 'Imagine Dragons', 'Imagine Dragons - Wrecked (Official Music Video).jpg', 'Imagine Dragons - Wrecked (Official Music Video).mp3'),
-(101, 2, 'Wellerman (Sea Shanty)', 'Nathan Evans', 'Nathan Evans  Wellerman Sea Shanty.jpg', 'Nathan Evans  Wellerman Sea Shanty.mp3'),
-(101, 2, 'Stressed Out', 'twenty one pilots', 'twenty one pilots - Stressed Out.jpg', 'twenty one pilots - Stressed Out.mp3'),
-(101, 2, 'Let me down slowly', 'Alec Benjamin', '_Alec Benjamin - Let Me Down Slowly (feat Alessia Cara) [Lyrics-Vietsub].jpg', '_Alec Benjamin - Let Me Down Slowly (feat Alessia Cara) [Lyrics-Vietsub].mp3'),
-(101, 2, 'Want you all the time', 'Bryant Barnes', 'Bryant Barnes - Want You All The Time (Lyrics).jpg', 'Bryant Barnes - Want You All The Time (Lyrics).mp3'),
-(101, 2, 'Head In The Clouds (Official Video)', 'Hayd', 'Hayd - Head In The Clouds (Official Video).png', 'Hayd - Head In The Clouds (Official Video).mp3');
+(100, 3, 'Whatever It Takes (Official Music Video)', 'Imagine Dragons', 'Imagine Dragons - Whatever It Takes (Official Music Video).jpg', 'Imagine Dragons - Whatever It Takes (Official Music Video).mp3'),
+(100, 3, 'Wrecked (Official Music Video)', 'Imagine Dragons', 'Imagine Dragons - Wrecked (Official Music Video).jpg', 'Imagine Dragons - Wrecked (Official Music Video).mp3'),
+(100, 3, 'Wellerman (Sea Shanty)', 'Nathan Evans', 'Nathan Evans  Wellerman Sea Shanty.jpg', 'Nathan Evans  Wellerman Sea Shanty.mp3'),
+(101, 3, 'Stressed Out', 'twenty one pilots', 'twenty one pilots - Stressed Out.jpg', 'twenty one pilots - Stressed Out.mp3'),
+(101, 3, 'Let me down slowly', 'Alec Benjamin', '_Alec Benjamin - Let Me Down Slowly (feat Alessia Cara) [Lyrics-Vietsub].jpg', '_Alec Benjamin - Let Me Down Slowly (feat Alessia Cara) [Lyrics-Vietsub].mp3'),
+(101, 3, 'Want you all the time', 'Bryant Barnes', 'Bryant Barnes - Want You All The Time (Lyrics).jpg', 'Bryant Barnes - Want You All The Time (Lyrics).mp3'),
+(101, 3, 'Head In The Clouds (Official Video)', 'Hayd', 'Hayd - Head In The Clouds (Official Video).png', 'Hayd - Head In The Clouds (Official Video).mp3');
