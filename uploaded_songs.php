@@ -144,6 +144,12 @@ if (isset($_POST['delete_song_id'])) {
 </head>
 
 <body>
+<?php
+	if (isset($_SESSION['message'])) {
+		echo $_SESSION['message'];
+		unset($_SESSION['message']);
+	}
+?>
 	<!-- header -->
 	<header>
 		<div class="container">
@@ -487,31 +493,19 @@ if (isset($_POST['delete_song_id'])) {
 	<!-- confirm delete song -->
 	<script>
 		function confirmDelete(formId, songName) {
-			Swal.fire({
-				title: "Are you sure?",
-				text: "Are you sure you want to delete the song: " + songName + "?",
-				icon: "warning",
-				showCancelButton: true,
-				confirmButtonText: "Yes, delete it!",
-				cancelButtonText: "Cancel"
-			}).then((result) => {
-				if (result.isConfirmed) {
-
-					Swal.fire({
-						title: "Deleted!",
-						text: "The song '" + songName + "' has been deleted.",
-						icon: "success",
-						timer: 1500,
-						showConfirmButton: false
-					});
-
-
-					setTimeout(() => {
-						document.getElementById(formId).submit();
-					}, 1600);
-				}
-			});
-		}
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Do you want to delete the song: " + songName + "?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "Cancel"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById(formId).submit(); // Không cần hiện Swal nữa ở đây
+                }
+            });
+        }
 	</script>
 	<!-- //confirm delete song -->
 </body>

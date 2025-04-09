@@ -2,7 +2,7 @@
 require 'phpmailer/PHPMailerAutoload.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    header('Content-Type: application/json; charset=utf-8'); // ✅ Thêm dòng này
+    //header('Content-Type: application/json; charset=utf-8'); //
     // Lấy dữ liệu từ form
     $name = $_POST['name'];
     $email = $_POST['email'];
