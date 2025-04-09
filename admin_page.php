@@ -1,11 +1,5 @@
 <?php
-session_start();
-if (!isset($_SESSION['email_address']))
-    header('location:index.php');
-
-include('connection.php');
-
-$user_id = $_SESSION['user_id'];
+include('auth.php');
 
 /* ===== XỬ LÝ UPDATE SONG ===== */
 if (isset($_POST['update_song'])) {
@@ -711,8 +705,6 @@ if (isset($_POST['upload_english'])) {
     <script src="js/bootstrap.js"></script>
     <!-- SweetAlert JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.28.11/dist/sweetalert2.min.js"></script>
-
-
     <!-- Custom JS: Xác nhận xóa và mở modal update -->
     <script>
         function confirmDelete(formId, songName) {

@@ -65,15 +65,6 @@ mysqli_stmt_close($stmt);
 	<title>My Musical World | Favorite Songs</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta charset="utf-8">
-	<script>
-		addEventListener("load", function() {
-			setTimeout(hideURLbar, 0);
-		}, false);
-
-		function hideURLbar() {
-			window.scrollTo(0, 1);
-		}
-	</script>
 	<link rel="icon" href="images/i1.png" />
 	<!-- Bootstrap Core CSS -->
 	<link href="css/bootstrap.css" rel="stylesheet" type="text/css" />
@@ -85,11 +76,7 @@ mysqli_stmt_close($stmt);
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 	<!-- SweetAlert CSS -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@7.28.11/dist/sweetalert2.min.css">
-	<script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 	<link rel="stylesheet" href="css/card.css">
-
 	<style>
 		/* Card details */
 		@import url('https://fonts.googleapis.com/css?family=Raleway:400,400i,500,500i,600,600i,700,700i,800,800i,900,900i|Roboto+Condensed:400,400i,700,700i');
@@ -287,29 +274,15 @@ mysqli_stmt_close($stmt);
 	<!-- JS Scripts -->
 	<script src="js/jquery-2.2.3.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.14/js/mdb.min.js"></script>
+	<script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<script src="js/move-top.js"></script>
 	<script src="js/easing.js "></script>
-
-	<script>
-		jQuery(document).ready(function($) {
-			$(".scroll ").click(function(event) {
-				event.preventDefault();
-
-				$('html,body').animate({
-					scrollTop: $(this.hash).offset().top
-				}, 1000);
-			});
-			$('#forgot').click(function() {
-				$('#modalLRForm').modal('hide');
-				$('#ForgotPasswordModal').modal('show');
-			});
-		});
-	</script>
-
+	<script src="js/contact.js"></script>
+	<script src="js/songs.js"></script>
 	<script src="js/bootstrap.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.28.11/dist/sweetalert2.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 	<!-- Xóa bài hát yêu thích -->
 	<script>
 		document.addEventListener("DOMContentLoaded", function() {

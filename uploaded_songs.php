@@ -1,13 +1,5 @@
 <?php
-session_start();
-if (!isset($_SESSION['user_id'])) {
-	header('location:index.php');
-	exit;
-}
-
-include('connection.php');
-
-$user_id = $_SESSION['user_id'];
+include('auth.php');
 
 if (isset($_POST['uploaded_songs'])) {
 	// Kiểm tra file upload
@@ -117,56 +109,7 @@ if (isset($_POST['delete_song_id'])) {
 	}
 }
 
-
-
-// Lấy danh sách bài hát từ bảng `songs` (cat_id=2 là nhạc Việt Nam)
-$sql_songs = "SELECT * FROM songs WHERE singer_id = '$user_id' ORDER BY song_id ASC";
-$res_songs = mysqli_query($conn, $sql_songs);
-
-while ($song = mysqli_fetch_array($res_songs)) {
-	$song_id = $song['song_id'];
-
-	// Nếu tồn tại POST[$song_id], nghĩa là form của bài hát này được submit
-	if (isset($_POST[$song_id])) {
-		// Kiểm tra đã có trong bảng favorite_songs chưa
-		$check_sql = "SELECT * FROM favorite_songs WHERE song_id = '$song_id' AND user_id = '$user_id'";
-		$check_res = mysqli_query($conn, $check_sql);
-
-		if (mysqli_num_rows($check_res) > 0) {
-			// Đã có sẵn => Hiển thị cảnh báo
-			echo '<script>
-                setTimeout(function(){
-                    Swal.fire("Warning", "<b>You have already added this song to your favorite list!</b>", "error");
-                }, 500);
-            </script>';
-		} else {
-			// Chưa có => Thêm vào favorite_songs
-			$insert_sql = "INSERT INTO favorite_songs (user_id, song_id) VALUES ('$user_id', '$song_id')";
-			$insert_res = mysqli_query($conn, $insert_sql);
-
-			if ($insert_res) {
-				$song_name = $song['song_name']; // để hiển thị cho người dùng biết bài nào đã thêm
-				echo '<script>
-                    setTimeout(function(){
-                        Swal.fire("Added", "<b>Song ' . $song_name . ' is successfully added to your favorite songs</b>", "success");
-                    }, 500);
-                </script>';
-			} else {
-				echo '<script>
-                    setTimeout(function(){
-                        Swal.fire("Oops...", "<b>Error while adding. Please check your internet connection!</b>", "error");
-                    }, 500);
-                </script>';
-			}
-		}
-	}
-}
-
-
-
-mysqli_data_seek($res_songs, 0);
 ?>
-
 
 <!DOCTYPE HTML>
 <html>
@@ -175,15 +118,6 @@ mysqli_data_seek($res_songs, 0);
 	<title>My Musical World | Uploaded Songs</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta charset="utf-8">
-	<script>
-		addEventListener("load", function() {
-			setTimeout(hideURLbar, 0);
-		}, false);
-
-		function hideURLbar() {
-			window.scrollTo(0, 1);
-		}
-	</script>
 	<link rel="icon" href="images/i1.png" />
 	<!-- Bootstrap Core CSS -->
 	<link href="css/bootstrap.css" rel='stylesheet' type='text/css' />
@@ -198,10 +132,6 @@ mysqli_data_seek($res_songs, 0);
 	<link href="//fonts.googleapis.com/css?family=Ubuntu:300,300i,400,400i,500,500i,700,700i" rel="stylesheet">
 	<!--//webfonts-->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@7.28.11/dist/sweetalert2.min.css">
-	<!-- js-->
-	<script src="js/jquery-2.2.3.min.js"></script>
-	<!-- js-->
-	<script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
 
 	<link rel="stylesheet" href="css/card.css">
 
@@ -542,77 +472,17 @@ mysqli_data_seek($res_songs, 0);
 	<!-- start-smooth-scrolling -->
 	<script src="js/move-top.js "></script>
 	<script src="js/easing.js "></script>
-	<script>
-		jQuery(document).ready(function($) {
-			$(".scroll ").click(function(event) {
-				event.preventDefault();
-
-				$('html,body').animate({
-					scrollTop: $(this.hash).offset().top
-				}, 1000);
-			});
-			$('#forgot').click(function() {
-				$('#modalLRForm').modal('hide');
-				$('ForgotPasswordModal').modal('show');
-			});
-		});
-	</script>
-
+	<!-- js-->
+	<script src="js/jquery-2.2.3.min.js"></script>
+	<!-- js-->
+	<script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
 	<!-- Bootstrap Core JavaScript -->
 	<script src="js/bootstrap.js"></script>
 	<!-- //Bootstrap Core JavaScript -->
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sweetalert2@7.28.11/dist/sweetalert2.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-	<!-- send us a mail section -->
-	<script>
-		$(document).ready(function() {
-			$('#contactForm').on('submit', function(e) {
-				e.preventDefault();
-
-				$.ajax({
-					type: 'POST',
-					url: 'send_mail.php',
-					data: $(this).serialize(),
-					dataType: 'json',
-					success: function(response) {
-						if (response.status === 'success') {
-							Swal.fire({
-								icon: 'success',
-								title: 'Success!',
-								text: response.message,
-								showConfirmButton: false,
-								timer: 1500,
-								customClass: {
-									popup: 'swal2-spotify'
-								}
-							});
-							$('#contactForm')[0].reset();
-						} else {
-							Swal.fire({
-								icon: 'error',
-								title: 'Error!',
-								text: response.message,
-								customClass: {
-									popup: 'swal2-spotify'
-								}
-							});
-						}
-					},
-					error: function() {
-						Swal.fire({
-							icon: 'error',
-							title: 'Error!',
-							text: 'An error occurred. Please try again later.',
-							customClass: {
-								popup: 'swal2-spotify'
-							}
-						});
-					}
-				});
-			});
-		});
-	</script>
+	<script src="js/contact.js"></script>
+	<script src="js/songs.js"></script>
 	<!-- //send us a mail section -->
 	<!-- confirm delete song -->
 	<script>
@@ -644,7 +514,6 @@ mysqli_data_seek($res_songs, 0);
 		}
 	</script>
 	<!-- //confirm delete song -->
-
 </body>
 
 </html>

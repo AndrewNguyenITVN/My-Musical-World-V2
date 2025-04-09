@@ -1,21 +1,22 @@
 <?php
 session_start(); // Bắt đầu session để kiểm tra đăng nhập người dùng
 
-// Hiển thị lỗi (phục vụ debug trong quá trình phát triển)
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
 include('connection.php'); // Kết nối CSDL
-header('Content-Type: application/json; charset=utf-8'); // Trả về dữ liệu JSON
+//header('Content-Type: application/json; charset=utf-8'); // Trả về dữ liệu JSON
 
 // Kiểm tra xem người dùng đã đăng nhập chưa
+// if (!isset($_SESSION['email_address']) || !isset($_SESSION['user_id'])) {
+//     exit(json_encode(['error' => 'Unauthorized'])); // Nếu chưa đăng nhập thì trả về lỗi
+// }
 if (!isset($_SESSION['email_address']) || !isset($_SESSION['user_id'])) {
-    exit(json_encode(['error' => 'Unauthorized'])); // Nếu chưa đăng nhập thì trả về lỗi
+    echo "<div class='alert alert-danger'>Bạn chưa đăng nhập!</div>";
+    exit;
 }
 
+
 $limit = 6; // Số bài hát hiển thị mỗi trang
-$page = isset($_POST['page_no']) ? (int)$_POST['page_no'] : 1; // Trang hiện tại (nếu không có thì mặc định là 1)
-$offset = ($page - 1) * $limit; // Vị trí bắt đầu truy vấn từ CSDL
+$page = isset($_POST['page_no']) ? (int)$_POST['page_no'] : 1; 
+$offset = ($page - 1) * $limit;
 
 // Lấy ID thể loại nhạc (mặc định là 2 nếu không gửi lên)
 $cat_id = isset($_POST['cat_id']) ? (int)$_POST['cat_id'] : 2;
@@ -111,7 +112,21 @@ if ($page < $total_pages) {
 $pagination .= "</ul></nav>";
 
 // Trả dữ liệu dạng JSON gồm danh sách bài hát và phần phân trang
-echo json_encode([
-    "songs" => $songs,
-    "pagination" => $pagination
-]);
+// echo json_encode([
+//     "songs" => $songs,
+//     "pagination" => $pagination
+// ]);
+echo "
+
+    <section class='details-card'>
+        <div class='container'>
+            <div class='row justify-content-center' id='song-list'>
+                $songs
+            </div>
+        </div>
+    </section>
+    <div class='pagination text-center justify-content-center' id='pagination'>
+        $pagination
+    </div>
+
+";

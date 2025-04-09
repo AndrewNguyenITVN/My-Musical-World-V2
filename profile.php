@@ -14,15 +14,6 @@ $email_address = $_SESSION['email_address'];
 	<title>Music Buzz</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta charset="utf-8">
-	<script>
-		addEventListener("load", function() {
-			setTimeout(hideURLbar, 0);
-		}, false);
-
-		function hideURLbar() {
-			window.scrollTo(0, 1);
-		}
-	</script>
 	<link rel="icon" href="images/i1.png" />
 	<!-- Bootstrap Core CSS -->
 	<link href="css/bootstrap.css" rel='stylesheet' type='text/css' />
@@ -236,21 +227,6 @@ $email_address = $_SESSION['email_address'];
 	<!-- start-smooth-scrolling -->
 	<script src="js/move-top.js "></script>
 	<script src="js/easing.js "></script>
-	<script>
-		jQuery(document).ready(function($) {
-			$(".scroll ").click(function(event) {
-				event.preventDefault();
-
-				$('html,body').animate({
-					scrollTop: $(this.hash).offset().top
-				}, 1000);
-			});
-			$('#forgot').click(function() {
-				$('#modalLRForm').modal('hide');
-				$('ForgotPasswordModal').modal('show');
-			});
-		});
-	</script>
 
 	<!-- Bootstrap Core JavaScript -->
 	<script src="js/bootstrap.js">
@@ -258,55 +234,8 @@ $email_address = $_SESSION['email_address'];
 	<!-- //Bootstrap Core JavaScript -->
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<!-- send us a mail section -->
-	<script>
-		$(document).ready(function() {
-			$('#contactForm').on('submit', function(e) {
-				e.preventDefault();
-
-				$.ajax({
-					type: 'POST',
-					url: 'send_mail.php',
-					data: $(this).serialize(),
-					dataType: 'json',
-					success: function(response) {
-						if (response.status === 'success') {
-							Swal.fire({
-								icon: 'success',
-								title: 'Success!',
-								text: response.message,
-								customClass: {
-									popup: 'swal2-spotify'
-								}
-							});
-							$('#contactForm')[0].reset();
-						} else {
-							Swal.fire({
-								icon: 'error',
-								title: 'Error!',
-								text: response.message,
-								showConfirmButton: false,
-								timer: 1500,
-								customClass: {
-									popup: 'swal2-spotify'
-								}
-							});
-						}
-					},
-					error: function() {
-						Swal.fire({
-							icon: 'error',
-							title: 'Error!',
-							text: 'An error occurred. Please try again later.',
-							customClass: {
-								popup: 'swal2-spotify'
-							}
-						});
-					}
-				});
-			});
-		});
-	</script>
-	<!-- //send us a mail section -->
+	<script src="js/contact.js"></script>
+	<script src="js/songs.js"></script>
 </body>
 
 </html>

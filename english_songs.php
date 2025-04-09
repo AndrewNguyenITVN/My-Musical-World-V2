@@ -1,58 +1,4 @@
-<?php
-session_start();
-if (!isset($_SESSION['user_id'])) {
-	header('location:index.php');
-	exit;
-}
-
-include('connection.php');
-
-$user_id = $_SESSION['user_id'];
-
-// Lấy danh sách bài hát từ bảng `songs` (cat_id=2 là nhạc Việt Nam)
-$sql_songs = "SELECT * FROM songs WHERE cat_id = 3 ORDER BY song_id ASC";
-$res_songs = mysqli_query($conn, $sql_songs);
-
-while ($song = mysqli_fetch_array($res_songs)) {
-	$song_id = $song['song_id'];
-
-	// Nếu tồn tại POST[$song_id], nghĩa là form của bài hát này được submit
-	if (isset($_POST[$song_id])) {
-		// Kiểm tra đã có trong bảng favorite_songs chưa
-		$check_sql = "SELECT * FROM favorite_songs WHERE song_id = '$song_id' AND user_id = '$user_id'";
-		$check_res = mysqli_query($conn, $check_sql);
-
-		if (mysqli_num_rows($check_res) > 0) {
-			// Đã có sẵn => Hiển thị cảnh báo
-			echo '<script>
-                setTimeout(function(){
-                    Swal.fire("Warning", "<b>You have already added this song to your favorite list!</b>", "error");
-                }, 500);
-            </script>';
-		} else {
-			// Chưa có => Thêm vào favorite_songs
-			$insert_sql = "INSERT INTO favorite_songs (user_id, song_id) VALUES ('$user_id', '$song_id')";
-			$insert_res = mysqli_query($conn, $insert_sql);
-
-			if ($insert_res) {
-				$song_name = $song['song_name']; // để hiển thị cho người dùng biết bài nào đã thêm
-				echo '<script>
-                    setTimeout(function(){
-                        Swal.fire("Added", "<b>Song ' . $song_name . ' is successfully added to your favorite songs</b>", "success");
-                    }, 500);
-                </script>';
-			} else {
-				echo '<script>
-                    setTimeout(function(){
-                        Swal.fire("Oops...", "<b>Error while adding. Please check your internet connection!</b>", "error");
-                    }, 500);
-                </script>';
-			}
-		}
-	}
-}
-?>
-
+<?php include('auth.php'); ?>
 <!DOCTYPE HTML>
 <html>
 
@@ -60,15 +6,6 @@ while ($song = mysqli_fetch_array($res_songs)) {
 	<title>My Musical World | English Songs</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta charset="utf-8">
-	<script>
-		addEventListener("load", function() {
-			setTimeout(hideURLbar, 0);
-		}, false);
-
-		function hideURLbar() {
-			window.scrollTo(0, 1);
-		}
-	</script>
 	<link rel="icon" href="images/i1.png" />
 	<!-- Bootstrap Core CSS -->
 	<link href="css/bootstrap.css" rel='stylesheet' type='text/css' />
@@ -83,126 +20,13 @@ while ($song = mysqli_fetch_array($res_songs)) {
 	<link href="//fonts.googleapis.com/css?family=Ubuntu:300,300i,400,400i,500,500i,700,700i" rel="stylesheet">
 	<!--//webfonts-->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@7.28.11/dist/sweetalert2.min.css">
-	<!-- js-->
-	<script src="js/jquery-2.2.3.min.js"></script>
-	<!-- js-->
-	<script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
 
 	<link rel="stylesheet" href="css/card.css">
-
 	<style>
 		/* card details start  */
 		@import url('https://fonts.googleapis.com/css?family=Raleway:400,400i,500,500i,600,600i,700,700i,800,800i,900,900i|Roboto+Condensed:400,400i,700,700i');
 		/* End card section */
 	</style>
-
-
-	<script>
-		$(document).ready(function() {
-			// Map file => cat_id
-			const albumInfo = {
-				"vietnam_songs.php": 2,
-				"english_songs.php": 3,
-				"uploaded_songs.php": 4
-			};
-
-			// Xác định category ID dựa vào URL
-			let currentPage = window.location.href;
-			let catId = 2; // default
-
-			for (let page in albumInfo) {
-				if (currentPage.includes(page)) {
-					catId = albumInfo[page];
-					break;
-				}
-			}
-
-
-			// Hàm load bài hát từ server
-			function loadSongs(page) {
-				$.ajax({
-					url: "fetch_songs.php",
-					type: "POST",
-					data: {
-						page_no: page,
-						cat_id: catId
-					},
-					success: function(response) {
-						try {
-							let data = typeof response === 'object' ? response : JSON.parse(response);
-							$("#song-list").html(data.songs);
-							$("#pagination").html(data.pagination);
-						} catch (e) {
-							console.error("JSON parse error:", e);
-							$("#song-list").html("<div class='alert alert-danger'>Cannot load song list</div>");
-						}
-					},
-					error: function(xhr, status, error) {
-						console.error("AJAX Error:", error);
-						$("#song-list").html("<div class='alert alert-danger'>Server connection error</div>");
-					}
-				});
-			}
-
-			// Tải trang đầu tiên
-			loadSongs(1);
-
-			// Phân trang
-			$(document).on("click", ".pagination a", function(e) {
-				e.preventDefault();
-				const page = $(this).data("page");
-				loadSongs(page);
-			});
-
-			// Thêm vào danh sách yêu thích
-			$(document).on("click", ".add-to-fav", function() {
-				const songId = $(this).data("songid");
-				const heartIcon = $(this).find("i.fa-heart");
-
-				$.ajax({
-					url: "add_favorite.php",
-					type: "POST",
-					contentType: "application/json",
-					data: JSON.stringify({
-						song_id: songId
-					}),
-					success: function(response) {
-						try {
-							let data = typeof response === 'object' ? response : JSON.parse(response);
-							if (data.status === 'success') {
-								heartIcon.addClass('text-danger');
-								Swal.fire({
-									title: 'Success',
-									text: data.message,
-									icon: 'success',
-									showConfirmButton: false,
-									timer: 1000
-								});
-							} else {
-								Swal.fire(
-									data.status === 'warning' ? 'Warning' : 'Error',
-									data.message,
-									data.status
-								);
-							}
-						} catch (e) {
-							console.error("JSON parse error:", e);
-							Swal.fire('Error', 'Invalid response from server', 'error');
-						}
-					},
-					error: function(xhr, status, error) {
-						console.error("Favorite AJAX Error:", error);
-						try {
-							let response = JSON.parse(xhr.responseText);
-							Swal.fire('Error', response.message, 'error');
-						} catch (e) {
-							Swal.fire('Error', 'Failed to connect to server', 'error');
-						}
-					}
-				});
-			});
-		});
-	</script>
 </head>
 
 <body>
@@ -252,15 +76,12 @@ while ($song = mysqli_fetch_array($res_songs)) {
 	<!-- //header -->
 
 	
-	<section class='details-card'>
-		<div class='container'>
-			<div class='row justify-content-center' id="song-list"></div>
-		</div>
-	</section>
+	<!-- //Show songs -->
+	<div id="show-songs">
+		
+	</div>
 
-	<!-- Pagination -->
-	<div class="pagination text-center justify-content-center" id="pagination"></div>
-	<!-- //Pagination -->
+	<!-- //End Show songs -->
 
 
 	<!-- contact top -->
@@ -371,80 +192,18 @@ while ($song = mysqli_fetch_array($res_songs)) {
 
 	<script src="js/move-top.js "></script>
 	<script src="js/easing.js "></script>
-	<!-- here stars scrolling icon -->
-	<script>
-		jQuery(document).ready(function($) {
-			$(".scroll ").click(function(event) {
-				event.preventDefault();
-
-				$('html,body').animate({
-					scrollTop: $(this.hash).offset().top
-				}, 1000);
-			});
-			$('#forgot').click(function() {
-				$('#modalLRForm').modal('hide');
-				$('ForgotPasswordModal').modal('show');
-			});
-		});
-	</script>
-	<!-- //here ends scrolling icon -->
-
+		<!-- js-->
+	<script src="js/jquery-2.2.3.min.js"></script>
+	<!-- js-->
+	<script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
 	<!-- Bootstrap Core JavaScript -->
 	<script src="js/bootstrap.js"></script>
 	<!-- //Bootstrap Core JavaScript -->
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sweetalert2@7.28.11/dist/sweetalert2.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-	<!-- Send us mail section -->
-	<script>
-		$(document).ready(function() {
-			$('#contactForm').on('submit', function(e) {
-				e.preventDefault();
-
-				$.ajax({
-					type: 'POST',
-					url: 'send_mail.php',
-					data: $(this).serialize(),
-					dataType: 'json',
-					success: function(response) {
-						if (response.status === 'success') {
-							Swal.fire({
-								icon: 'success',
-								title: 'Success!',
-								text: response.message,
-								customClass: {
-									popup: 'swal2-spotify'
-								}
-							});
-							$('#contactForm')[0].reset();
-						} else {
-							Swal.fire({
-								icon: 'error',
-								title: 'Error!',
-								text: response.message,
-								showConfirmButton: false,
-								timer: 1500,
-								customClass: {
-									popup: 'swal2-spotify'
-								}
-							});
-						}
-					},
-					error: function() {
-						Swal.fire({
-							icon: 'error',
-							title: 'Error!',
-							text: 'An error occurred. Please try again later.',
-							customClass: {
-								popup: 'swal2-spotify'
-							}
-						});
-					}
-				});
-			});
-		});
-	</script>
-	<!-- //Send us mail section -->
+	<script src="js/contact.js"></script>
+	<script src="js/songs.js"></script>
 </body>
 
 </html>
