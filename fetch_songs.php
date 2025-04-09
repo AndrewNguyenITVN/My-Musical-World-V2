@@ -5,9 +5,7 @@ include('connection.php'); // Kết nối CSDL
 //header('Content-Type: application/json; charset=utf-8'); // Trả về dữ liệu JSON
 
 // Kiểm tra xem người dùng đã đăng nhập chưa
-// if (!isset($_SESSION['email_address']) || !isset($_SESSION['user_id'])) {
-//     exit(json_encode(['error' => 'Unauthorized'])); // Nếu chưa đăng nhập thì trả về lỗi
-// }
+
 if (!isset($_SESSION['email_address']) || !isset($_SESSION['user_id'])) {
     echo "<div class='alert alert-danger'>Bạn chưa đăng nhập!</div>";
     exit;
@@ -33,7 +31,7 @@ $res_songs = mysqli_stmt_get_result($stmt);
 mysqli_stmt_close($stmt);
 
 // Lặp qua từng bài hát để hiển thị và kiểm tra trạng thái yêu thích
-while ($row = mysqli_fetch_assoc($res_songs)) {
+while ($row = mysqli_fetch_assoc($res_songs)) { //lấy 1 dòng dữ liệu từ kết quả truy vấn $res_songs cho đến khi không còn dòng nào trả về false.
     $song_id     = $row['song_id'];
     $song_name   = $row['song_name'];
     $singer_name = $row['singer_name'];
@@ -112,10 +110,6 @@ if ($page < $total_pages) {
 $pagination .= "</ul></nav>";
 
 // Trả dữ liệu dạng JSON gồm danh sách bài hát và phần phân trang
-// echo json_encode([
-//     "songs" => $songs,
-//     "pagination" => $pagination
-// ]);
 echo "
 
     <section class='details-card'>

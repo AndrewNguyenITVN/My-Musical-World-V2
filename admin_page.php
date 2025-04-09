@@ -31,13 +31,13 @@ if (isset($_POST['update_song'])) {
     if ($result) {
         $_SESSION['message'] = '<script type="text/javascript">
                 setTimeout(function () { 
-                  sweetAlert("Uploaded"," <b>Uploaded song successfully ' . $update_song_name . '</b>","success");
+                  Swal.fire("Uploaded"," <b>Uploaded song successfully ' . $update_song_name . '</b>","success");
                 }, 500);
               </script>';
     } else {
         $_SESSION['message'] = '<script type="text/javascript">
                 setTimeout(function () { 
-                  sweetAlert("Error","Error while updating. Please check your internet connection!","error");
+                  Swal.fire("Error","Error while updating. Please check your internet connection!","error");
                 }, 500);
               </script>';
     }
@@ -59,7 +59,7 @@ if (isset($_POST['delete_song_id'])) {
     if ($result) {
         $_SESSION['message'] = '<script type="text/javascript">
                 setTimeout(function () { 
-                  sweetAlert("Deleted"," <b>Deleted song successfully ' . $song_name . '</b>","success");
+                  Swal.fire("Deleted"," <b>Deleted song successfully ' . $song_name . '</b>","success");
                 }, 500);
               </script>';
         header("Location: admin_page.php");
@@ -67,7 +67,7 @@ if (isset($_POST['delete_song_id'])) {
     } else {
         $_SESSION['message'] = '<script type="text/javascript">
                 setTimeout(function () { 
-                  sweetAlert("Error","Error while deleting. Please check your internet connection!","error");
+                  Swal.fire("Error","Error while deleting. Please check your internet connection!","error");
                 }, 500);
               </script>';
         header("Location: admin_page.php");
@@ -82,7 +82,7 @@ if (isset($_POST['upload_vietnam'])) {
     if (!isset($_FILES['audio_file']) || $_FILES['audio_file']['error'] !== UPLOAD_ERR_OK) {
         $_SESSION['message'] = '<script type="text/javascript">
                 setTimeout(function () { 
-                    sweetAlert("Error","Error while uploading. Please check your file!","error");
+                    Swal.fire("Error","Error while uploading. Please check your file!","error");
                 }, 500);
             </script>';
         header("Location: admin_page.php");
@@ -92,7 +92,7 @@ if (isset($_POST['upload_vietnam'])) {
     if (!isset($_FILES['song_image']) || $_FILES['song_image']['error'] !== UPLOAD_ERR_OK) {
         $_SESSION['message'] = '<script type="text/javascript">
                 setTimeout(function () { 
-                    sweetAlert("Error","Error while uploading. Please check your cover image!","error");
+                    Swal.fire("Error","Error while uploading. Please check your cover image!","error");
                 }, 500);
             </script>';
         header("Location: admin_page.php");
@@ -122,7 +122,7 @@ if (isset($_POST['upload_vietnam'])) {
     if ($result) {
         $_SESSION['message'] = '<script type="text/javascript">
                 setTimeout(function () { 
-                  sweetAlert("Uploaded"," <b>Uploaded song successfully ' . $song_name . '</b>","success");
+                  Swal.fire("Uploaded"," <b>Uploaded song successfully ' . $song_name . '</b>","success");
                 }, 500);
               </script>';
         header("Location: admin_page.php");
@@ -130,7 +130,7 @@ if (isset($_POST['upload_vietnam'])) {
     } else {
         $_SESSION['message'] = '<script type="text/javascript">
                 setTimeout(function () { 
-                  sweetAlert("Error","Error while uploading. Please check your internet connection!","error");
+                  Swal.fire("Error","Error while uploading. Please check your internet connection!","error");
                 }, 500);
               </script>';
         header("Location: admin_page.php");
@@ -143,7 +143,7 @@ if (isset($_POST['upload_english'])) {
     if (!isset($_FILES['audio_file']) || $_FILES['audio_file']['error'] !== UPLOAD_ERR_OK) {
         $_SESSION['message'] = '<script type="text/javascript">
                 setTimeout(function () { 
-                    sweetAlert("Error","Error while uploading. Please check your file!","error");
+                    Swal.fire("Error","Error while uploading. Please check your file!","error");
                 }, 500);
             </script>';
         header("Location: admin_page.php");
@@ -153,7 +153,7 @@ if (isset($_POST['upload_english'])) {
     if (!isset($_FILES['song_image']) || $_FILES['song_image']['error'] !== UPLOAD_ERR_OK) {
         $_SESSION['message'] = '<script type="text/javascript">
                 setTimeout(function () { 
-                    sweetAlert("Error","Error while uploading. Please check your cover image!","error");
+                    Swal.fire("Error","Error while uploading. Please check your cover image!","error");
                 }, 500);
             </script>';
         header("Location: admin_page.php");
@@ -183,7 +183,7 @@ if (isset($_POST['upload_english'])) {
     if ($result) {
         $_SESSION['message'] = '<script type="text/javascript">
                 setTimeout(function () { 
-                  sweetAlert("Uploaded"," <b>Uploaded song successfully ' . $song_name . '</b>","success");
+                  Swal.fire("Uploaded"," <b>Uploaded song successfully ' . $song_name . '</b>","success");
                 }, 500);
               </script>';
         header("Location: admin_page.php");
@@ -191,7 +191,7 @@ if (isset($_POST['upload_english'])) {
     } else {
         $_SESSION['message'] = '<script type="text/javascript">
                 setTimeout(function () { 
-                  sweetAlert("Error","Error while uploading. Please check your internet connection!","error");
+                  Swal.fire("Error","Error while uploading. Please check your internet connection!","error");
                 }, 500);
               </script>';
         header("Location: admin_page.php");
@@ -215,8 +215,6 @@ if (isset($_POST['upload_english'])) {
     <link href="css/style.css" rel="stylesheet" type="text/css" />
     <!-- font-awesome icons -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <!-- SweetAlert CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@7.28.11/dist/sweetalert2.min.css">
     <style>
         th {
             background-color: #121212 !important;
@@ -703,33 +701,20 @@ if (isset($_POST['upload_english'])) {
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.14/js/mdb.min.js"></script>
     <!-- Bootstrap Core JavaScript -->
     <script src="js/bootstrap.js"></script>
-    <!-- SweetAlert JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.28.11/dist/sweetalert2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Custom JS: Xác nhận xóa và mở modal update -->
     <script>
         function confirmDelete(formId, songName) {
             Swal.fire({
                 title: "Are you sure?",
-                text: "Are you sure you want to delete the song: " + songName + "?",
+                text: "Do you want to delete the song: " + songName + "?",
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonText: "Yes, delete it!",
                 cancelButtonText: "Cancel"
             }).then((result) => {
                 if (result.isConfirmed) {
-
-                    Swal.fire({
-                        title: "Deleted!",
-                        text: "The song '" + songName + "' has been deleted.",
-                        icon: "success",
-                        timer: 1500,
-                        showConfirmButton: false
-                    });
-
-
-                    setTimeout(() => {
-                        document.getElementById(formId).submit();
-                    }, 1600);
+                    document.getElementById(formId).submit(); // Không cần hiện Swal nữa ở đây
                 }
             });
         }
