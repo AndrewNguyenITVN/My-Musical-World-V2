@@ -59,9 +59,15 @@ if (isset($_POST['delete_song_id'])) {
     if ($result) {
         $_SESSION['message'] = '<script type="text/javascript">
                 setTimeout(function () { 
-                  Swal.fire("Deleted"," <b>Deleted song successfully ' . $song_name . '</b>","success");
+                    Swal.fire({
+                        title: "Deleted",
+                        html: "<b>Deleted song successfully ' . $song_name . '</b>",
+                        icon: "success",
+                        showConfirmButton: false,
+                        timer: 1000
+                    });
                 }, 500);
-              </script>';
+            </script>';
         header("Location: admin_page.php");
         exit();
     } else {

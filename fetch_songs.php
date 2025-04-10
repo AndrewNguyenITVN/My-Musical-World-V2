@@ -2,12 +2,10 @@
 session_start(); // Bắt đầu session để kiểm tra đăng nhập người dùng
 
 include('connection.php'); // Kết nối CSDL
-//header('Content-Type: application/json; charset=utf-8'); // Trả về dữ liệu JSON
 
 // Kiểm tra xem người dùng đã đăng nhập chưa
-
 if (!isset($_SESSION['email_address']) || !isset($_SESSION['user_id'])) {
-    echo "<div class='alert alert-danger'>Bạn chưa đăng nhập!</div>";
+    echo "<div class='alert alert-danger'>You have not login yet!</div>";
     exit;
 }
 

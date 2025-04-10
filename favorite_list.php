@@ -309,8 +309,8 @@ mysqli_stmt_close($stmt);
 									},
 									body: "delete_song_id=" + encodeURIComponent(songId)
 								})
-								.then(res => res.json())
-								.then(data => {
+								.then(res => res.json())  // Chuyển phản hồi thành JSON
+								.then(data => {           // Dữ liệu JSON sẵn sàng để sử dụng
 									if (data.status === 'success') {
 										Swal.fire({
 											title: "Removed!",

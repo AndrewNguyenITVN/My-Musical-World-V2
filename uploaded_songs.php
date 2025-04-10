@@ -92,10 +92,16 @@ if (isset($_POST['delete_song_id'])) {
 	$result = mysqli_query($conn, $sql_del);
 	if ($result) {
 		$_SESSION['message'] = '<script type="text/javascript">
-                setTimeout(function () { 
-                  Swal.fire("Deleted"," <b>Deleted song successfully ' . $song_name . '</b>","success");
-                }, 500);
-              </script>';
+			setTimeout(function () { 
+				Swal.fire({
+					title: "Deleted",
+					html: "<b>Deleted song successfully ' . $song_name . '</b>",
+					icon: "success",
+					showConfirmButton: false,
+					timer: 1000 
+				});
+			}, 500);
+		</script>';
 		header("Location: uploaded_songs.php");
 		exit();
 	} else {

@@ -22,7 +22,7 @@ $username = $_SESSION['username'];
 $password = $_SESSION['password'];
 $activation_code = $_SESSION['activation_code'];
 
-$mail->setFrom('mymusicworld.2025@gmail.com', 'Musical World');
+$mail->setFrom('mymusicworld.2025@gmail.com', 'My Musical World');
 $mail->addAddress($to);
 $mail->isHTML(true);
 $mail->Subject = 'Account Confirmation Message';
@@ -36,7 +36,12 @@ $mail->Body = "
     Username: $to<br>
     Password: $password<br>
     ------------------------<br><br>
-    <a href='$verify_url'>Click here to activate your account</a>
+    <a href='" . $verify_url . "' style='padding: 10px 20px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 5px;'>Click here to activate your account</a>
+    
+    <br><br>
+        
+    <pre>Thanks,
+    <b>From My Musical World with love</b></pre>
 ";
 
 ?>
