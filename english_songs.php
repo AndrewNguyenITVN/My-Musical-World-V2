@@ -77,7 +77,7 @@
 
 	
 	<!-- //Show songs -->
-	<div class="details-card">
+	<div class="details-card" style="margin-top: 100px;">
 	<div class="container">
 		<div class="row justify-content-center" id="song-list"></div>
 		<div class="pagination text-center justify-content-center" id="pagination"></div>
