@@ -1,3 +1,40 @@
+
+let currentAudio = null;
+
+document.addEventListener('play', function (e) {
+    // chỉ xử lý khi target là thẻ <audio>
+    if (e.target.tagName === 'AUDIO') {
+        const audio = e.target;
+
+        // 1. Pause và reset audio cũ (nếu có)
+        if (currentAudio && currentAudio !== audio) {
+            currentAudio.pause();
+            currentAudio.currentTime = 0;
+            // gỡ đánh dấu đã cộng lượt nghe (nếu có)
+            $(currentAudio).removeData("counted");
+        }
+        currentAudio = audio;
+
+        // 2. Cộng lượt nghe (chỉ lần đầu play của mỗi thẻ audio)
+        const $audio = $(audio);
+        if (!$audio.data("counted")) {
+            // lấy songId từ button “yêu thích”
+            const songId = $audio.closest(".card-body")
+                .find(".add-to-fav")
+                .data("songid");
+            $.post("update_play_count.php", { song_id: songId })
+                .done(function () {
+                    $audio.data("counted", true);
+                    // cập nhật hiển thị lượt nghe
+                    const $countSpan = $audio.closest(".card-body")
+                        .find(".listen-count .count-number");
+                    let current = parseInt($countSpan.text(), 10) || 0;
+                    $countSpan.text(current + 1);
+                });
+        }
+    }
+}, true);
+
 $(document).ready(function () {
     const albumInfo = {
         "vietnam_songs.php": 2,
@@ -22,8 +59,13 @@ $(document).ready(function () {
                 page_no: page,
                 cat_id: catId
             },
+            // success: function (response) {
+            //     $("#show-songs").html(response);
+            //     $('html, body').scrollTop(0);
+            // },
             success: function (response) {
-                $("#show-songs").html(response);
+                $("#song-list").html(response.songs);
+                $("#pagination").html(response.pagination);
                 $('html, body').scrollTop(0);
             },
             error: function () {
@@ -87,4 +129,3 @@ $(document).ready(function () {
         });
     });
 });
-

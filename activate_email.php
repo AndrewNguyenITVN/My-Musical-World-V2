@@ -12,8 +12,8 @@ $mail = new PHPMailer;
 $mail->isSMTP();
 $mail->Host = 'smtp.gmail.com';
 $mail->SMTPAuth = true;
-$mail->Username = 'mymusicworld.2025@gmail.com';
-$mail->Password = 'vtpb htgv btuk xqpa';
+$mail->Username = 'YOUR EMAIL';
+$mail->Password = 'YOUR EMAIL PASSWORD';
 $mail->SMTPSecure = 'tls';
 $mail->Port = 587;
 
@@ -22,7 +22,7 @@ $username = $_SESSION['username'];
 $password = $_SESSION['password'];
 $activation_code = $_SESSION['activation_code'];
 
-$mail->setFrom('mymusicworld.2025@gmail.com', 'My Musical World');
+$mail->setFrom('YOUR EMAIL', 'My Musical World');
 $mail->addAddress($to);
 $mail->isHTML(true);
 $mail->Subject = 'Account Confirmation Message';

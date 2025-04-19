@@ -77,8 +77,11 @@
 
 	
 	<!-- //Show songs -->
-	<div id="show-songs">
-		
+	<div class="details-card">
+	<div class="container">
+		<div class="row justify-content-center" id="song-list"></div>
+		<div class="pagination text-center justify-content-center" id="pagination"></div>
+	</div>
 	</div>
 
 	<!-- //End Show songs -->

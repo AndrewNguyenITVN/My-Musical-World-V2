@@ -3,6 +3,8 @@ session_start(); // Bắt đầu session để kiểm tra đăng nhập người
 
 include('connection.php'); // Kết nối CSDL
 
+header('Content-Type: application/json');
+
 // Kiểm tra xem người dùng đã đăng nhập chưa
 if (!isset($_SESSION['email_address']) || !isset($_SESSION['user_id'])) {
     echo "<div class='alert alert-danger'>You have not login yet!</div>";
@@ -35,6 +37,7 @@ while ($row = mysqli_fetch_assoc($res_songs)) { //lấy 1 dòng dữ liệu từ
     $singer_name = $row['singer_name'];
     $song_image  = $row['song_image'];
     $audio_file  = $row['audio_file'];
+    $count_listen= $row['play_count'];
 
     // Kiểm tra xem bài hát này đã được người dùng thêm vào "yêu thích" chưa
     $check_sql = "SELECT 1 FROM favorite_songs WHERE user_id = ? AND song_id = ?";
@@ -62,9 +65,14 @@ while ($row = mysqli_fetch_assoc($res_songs)) { //lấy 1 dòng dữ liệu từ
                     <audio controls style='width: 100%;' preload='none'> 
                         <source src='$audio_path' type='audio/mp3'>
                     </audio><br>
-                    <button class='btn-card add-to-fav' data-songid='$song_id' data-catid='$cat_id'>
-                        <i class='fa fa-heart $heart_class'></i>
-                    </button><br>  
+                    <div style='display: flex; align-items: center; gap: 10px; margin-top: 5px;'>
+                        <button class='btn-card add-to-fav' data-songid='$song_id' data-catid='$cat_id'>
+                            <i class='fa fa-heart $heart_class'></i>
+                        </button>
+                        <span class='listen-count' style='color: white; font-size: 14px;' data-count='$count_listen'>
+                            <i class='fa fa-headphones'></i> <span class='count-number'>$count_listen</span> listens
+                        </span>
+                    </div>  
                 </div>
             </div>
         </div>";
@@ -107,18 +115,7 @@ if ($page < $total_pages) {
 
 $pagination .= "</ul></nav>";
 
-// Trả dữ liệu dạng JSON gồm danh sách bài hát và phần phân trang
-echo "
-
-    <section class='details-card'>
-        <div class='container'>
-            <div class='row justify-content-center' id='song-list'>
-                $songs
-            </div>
-        </div>
-    </section>
-    <div class='pagination text-center justify-content-center' id='pagination'>
-        $pagination
-    </div>
-
-";
+echo json_encode([
+    'songs' => $songs,
+    'pagination' => $pagination
+]);

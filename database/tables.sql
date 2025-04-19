@@ -38,6 +38,7 @@ CREATE TABLE `songs` (
     `singer_name` VARCHAR(100) NOT NULL,
     `song_image` VARCHAR(255) NOT NULL,
     `audio_file` VARCHAR(255) NOT NULL,
+    `play_count` INT DEFAULT 0,
     PRIMARY KEY (`song_id`),
     FOREIGN KEY (`cat_id`) REFERENCES `category`(`cat_id`) ON DELETE CASCADE,
     FOREIGN KEY (`singer_id`) REFERENCES `user`(`user_id`) ON DELETE SET NULL
@@ -117,7 +118,7 @@ VALUES
         'Tan Dat',
         '0399667938',
         'datB2203438@student.ctu.edu.vn',
-        '5f6dc80c9e71da72aa801215f6d61a5e',
+        '21232f297a57a5a743894a0e4a801fc3',
         1
     ),
     (
